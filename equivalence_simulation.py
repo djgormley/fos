@@ -1,6 +1,6 @@
 """Generate the numerical verification results for the accompanying manuscript.
 
-We first verify the finite-record detector identity. Next, we estimate the
+We first verify the finite-record test-statistic identity. Next, we estimate the
 detection probability of the common statistic. Lastly, we evaluate the loss
 caused by evaluating an off-grid tone with a single DFT bin.
 """
@@ -94,7 +94,7 @@ def main() -> None:
     )
     ax.set_xlabel("Per-sample SNR (dB)")
     ax.set_ylabel("Detection probability")
-    ax.set_title(f"(a) Detector-equivalence verification ($N={N}$)")
+    ax.set_title(f"(a) Statistic-equivalence verification ($N={N}$)")
     ax.set_ylim(-0.02, 1.02)
     ax.set_xlim(snr_db[0], snr_db[-1])
     ax.grid(True, alpha=0.28)
