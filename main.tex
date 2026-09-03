@@ -326,9 +326,17 @@ At first order, the cyclic moment is the cyclic mean, and its $N$-sample estimat
 =\frac{X_N(\alpha)}{N}
 =\frac{\vect{s}_{\alpha}^{H}\vect{x}}{N}.
 \end{equation*}
-The same finite-record quantity is therefore a cyclic-mean estimate, a Fourier sample, and a complex-tone matched-filter output, up to normalization; on the DFT grid, the Fourier sample is a DFT coefficient.  In proper complex white Gaussian noise of known variance, its normalized squared magnitude is exactly the GLRT statistic for a known-frequency tone with unknown complex amplitude.  This transitive identity is the main result.
+This equality holds at every evaluated $\alpha$; only replacing $X_N(\alpha)$ by the DFT coefficient $X[k]$ requires $\alpha=k/N$.  Colored noise uses the standard covariance-weighted, or whitened, statistic in~\eqref{eq:colored}; real tones, multiple harmonics, and random ensemble phase require the modifications described above.
 
-The identity lets first-order cyclic processing inherit standard tone-detector implementations, thresholds, and performance expressions, but only under matching assumptions.  Off grid the equality is to a DTFT sample rather than an $N$-point DFT bin; colored noise requires covariance weighting, equivalently whitening both the data and tone template; real tones, multiple harmonics, and random ensemble phase require the modifications described above.
+Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, the normalized cyclic-mean energy, Fourier energy, and matched-filter energy are the same GLRT statistic:
+\begin{equation*}
+\boxed{
+\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}
+=\frac{|X_N(\alpha)|^2}{N\sigma^2}
+=\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}
+=T_{\alpha}.
+}
+\end{equation*}
 
 % Add any acknowledgments and required conflict-of-interest statement before submission.
 
