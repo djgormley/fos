@@ -21,9 +21,9 @@
 \usepackage{booktabs}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \hypersetup{
-  pdftitle={From the First-Order Cyclic Mean to a Tone Matched Filter},
+  pdftitle={A First-Order Cyclostationarity Statistic Reduces to Tone Matched Filtering},
   pdfauthor={Dylan J. Gormley},
-  pdfsubject={The first-order cyclic mean, Fourier coefficients, and tone matched filtering}
+  pdfsubject={First-order cyclostationarity, cyclic means, Fourier coefficients, and tone matched filtering}
 }
 
 \definecolor{deepblue}{HTML}{194C80}
@@ -33,7 +33,8 @@
 \newcommand{\CN}{\mathcal{CN}}
 \newcommand{\vect}[1]{\bm{#1}}
 
-\title{From the First-Order Cyclic Mean to a Tone Matched Filter\\
+\title{A First-Order Cyclostationarity Statistic\\
+Reduces to Tone Matched Filtering\\
 {\large An Equivalence Chain and Its Conditions}}
 
 \author{Dylan~J.~Gormley and Kevin~M.~Bandura%
@@ -44,13 +45,13 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 }
 
 \markboth{IEEE Signal Processing Magazine, Columns \& Forum Draft}%
-{Gormley: From the First-Order Cyclic Mean to a Tone Matched Filter}
+{Gormley: A First-Order Cyclostationarity Statistic}
 
 \begin{document}
 \maketitle
 \section*{}
 \label{sec:introduction}
-\IEEEPARstart{C}{yclostationary} signal processing often emphasizes second- and higher-order structure.  At first order, however, the cyclic moment is the cyclic mean.  For a rectangular $N$-sample record, its finite-record estimate is a normalized discrete-time Fourier transform (DTFT) evaluation and a normalized complex-tone correlator output.  On the discrete Fourier transform (DFT) grid, that Fourier sample is exactly a DFT coefficient.  Under a known-frequency tone model in proper complex white Gaussian noise of known variance, the normalized squared magnitude of the same output is the unknown-complex-amplitude tone generalized likelihood-ratio test (GLRT).  This chain---first-order cyclic moment, cyclic mean, Fourier coefficient, and tone matched-filter output---is the practical point of this article.  We develop each link and its condition: off-grid frequencies require a DTFT evaluation or refinement, colored noise requires covariance weighting, real tones span two quadratures, and random ensemble phase can remove the ensemble cyclic mean without removing finite-record tone energy.
+\IEEEPARstart{T}{he} first-order cyclostationarity statistic considered here is formed from the cyclic mean, the order-one cyclic moment.  At a candidate cycle frequency, its finite-record estimate counter-rotates the record and averages.  For a rectangular $N$-sample record, this estimate is a normalized discrete-time Fourier transform (DTFT) evaluation and a normalized complex-tone matched-filter output.  On the discrete Fourier transform (DFT) grid, that Fourier sample is exactly a normalized DFT coefficient.  Under a known-frequency tone model in proper complex white Gaussian noise of known variance, the normalized squared magnitude of the same output is the unknown-complex-amplitude tone generalized likelihood-ratio test (GLRT).  Thus, computing the statistic reduces to tone matched filtering followed by normalization and thresholding.  We develop each link and its condition: off-grid frequencies require a DTFT evaluation or refinement, colored noise requires covariance weighting, real tones span two quadratures, and random ensemble phase can remove the ensemble cyclic mean without removing finite-record tone energy.
 
 \section*{The Trick: Counter-Rotate and Average}
 

@@ -1,8 +1,8 @@
-# Cyclic-Mean and Tone Matched-Filter Equivalence
+# First-Order Cyclostationarity and Tone Matched Filtering
 
 This repository contains the manuscript source and numerical verification for
-*From the First-Order Cyclic Mean to a Tone Matched Filter: An Equivalence
-Chain and Its Conditions*.
+*A First-Order Cyclostationarity Statistic Reduces to Tone Matched Filtering:
+An Equivalence Chain and Its Conditions*.
 
 ## Reproduce the numerical results
 
