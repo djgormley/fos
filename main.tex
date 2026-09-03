@@ -1,0 +1,323 @@
+% Official IEEE Signal Processing Magazine Columns & Forum submission format.
+% Template package: IEEE-SPM-C&F-Templates_LaTeX.zip, retrieved from the
+% IEEE Template Selector on September 2, 2026. The underlying official
+% template identifies itself as modified by the C&F editors on June 10, 2024.
+\documentclass[11pt,draftcls,onecolumn,journal]{IEEEtran}
+
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{xcolor}
+\usepackage{bm}
+\usepackage[hidelinks]{hyperref}
+\usepackage{booktabs}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+\hypersetup{
+  pdftitle={When Is First-Order Cyclostationary Detection a Matched Filter?},
+  pdfauthor={Dylan J. Gormley},
+  pdfsubject={First-order cyclic moments, Fourier coefficients, and tone matched filtering}
+}
+
+\definecolor{deepblue}{HTML}{194C80}
+\definecolor{warmgray}{HTML}{F2F3F5}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\CN}{\mathcal{CN}}
+\newcommand{\vect}[1]{\bm{#1}}
+
+\title{When Is First-Order Cyclostationary Detection a Matched Filter?\\
+{\large An Exact Equivalence, Its Assumptions, and Its Limits}}
+
+\author{Dylan~J.~Gormley%
+\thanks{Dylan J. Gormley is with the Department of Computer Science \& Electrical Engineering,
+West Virginia University, Morgantown, WV, USA.
+Email: \href{mailto:dylan.gormley@mail.wvu.edu}{dylan.gormley@mail.wvu.edu}.}%
+\thanks{This work was supported by [funder] under Grant [grant number].}%
+}
+
+\markboth{IEEE Signal Processing Magazine, Columns \& Forum Draft}%
+{Gormley: First-Order Cyclostationary Detection as Tone Matched Filtering}
+
+% Before submission: add affiliation/contact details and any acknowledgments,
+% funding, conflicts.
+
+\begin{document}
+\maketitle
+\section*{}
+\label{sec:introduction}
+\IEEEPARstart{C}{yclostationary} signal processing and classical detection theory use different language for a particularly simple operation.  The first literature calls it estimation of a first-order cyclic moment.  The second calls it correlation with a complex sinusoid, a Fourier coefficient, or the output of a tone matched filter.  For a finite data record these are not merely analogous operations: they are the same inner product.  Under a known-frequency deterministic-tone model in white Gaussian noise, the usual covariance-normalized first-order cyclic-mean test is also, up to a positive scale factor, the quadrature matched-filter generalized likelihood-ratio test (GLRT).  The algebraic identity is elementary, but its limits matter.  A DFT coefficient is exact only on the DFT grid; colored noise requires whitening; a real sinusoid occupies a two-dimensional quadrature subspace; and an ensemble-random phase can erase the first-order cyclic mean without erasing finite-record tone energy.  This article makes the detector-level equivalence explicit, connects results that are normally presented in separate literatures, and gives practical rules for when the three descriptions can and cannot be interchanged.
+
+\section*{Why the identity is easy to overlook}
+
+Classical wide-sense cyclostationarity is formulated through periodic second-order moments and spectral correlation.  For complex time series, conjugate and nonconjugate autocorrelations provide the relevant second-order coefficients; lag-product processing converts their periodic components into spectral lines~\cite[Secs. 3.3--3.5, pp. 646--649; Sec. 8.1, p. 663]{gardner2006}.  Higher-order cyclic moments and cumulants extend the construction~\cite[Sec. 13.2, pp. 667--669]{gardner2006}.
+
+First order is simpler.  For a real time series, Gardner shows that a finite additive sinusoid is equivalent to a nonzero time-average Fourier coefficient and calls this first-order periodicity; he then derives the finite-window exponential extractor~\cite[Sec. 2.1, pp. 15--16, eqs. (1)--(3); Sec. 2.2, p. 18, eqs. (17)--(21)]{gardner1986}.  Dobre, Rajan, and Inkol later used first-order cyclostationarity for joint detection and classification~\cite[Sec. 4.1, pp. 4--5]{dobre2009}.  Their estimator is Eq. (9)~\cite[Sec. 3.1, eq. (9), p. 3]{dobre2009}, and they later observed that it ``practically represents'' the DFT of the data sequence~\cite[Sec. 6.2.1, p. 7]{dobre2009}.  For the complex deterministic-tone model, Kay derives the unknown-amplitude-and-phase GLRT as a periodogram, or quadrature matched filter~\cite[Sec. 13.8.1, pp. 510--514, eqs. (13.49)--(13.53)]{kay1998}.  Spooner and Nicholls likewise call tone detection a variant of matched-filter detection implementable by matched filtering or Fourier analysis~\cite[Sec. 18.1.4, p. 600]{spooner2009}.
+
+In the literature reviewed for this article, these sources supply the individual links, but none states the complete normalization-aware detector identity.  The contribution here is therefore a clarification and synthesis, not a priority claim for the underlying algebra:
+
+\begin{center}
+\fcolorbox{deepblue}{warmgray}{%
+\begin{minipage}{0.88\textwidth}
+\textbf{Central claim.} The finite-record first-order cyclic-mean estimate at one cycle frequency is a normalized complex-sinusoid matched-filter output.  In white Gaussian noise, its covariance-normalized magnitude square has exactly the same rejection regions as the unknown-complex-amplitude tone GLRT.
+\end{minipage}}
+\end{center}
+
+The wording is deliberately narrow.  Neither every first-order procedure nor every tone detector is covered, and ``optimal'' is meaningful only after the signal and noise model have been stated.
+
+\section*{From an arbitrary cyclic order to order one}
+
+A general $p$th-order cyclic temporal cross-moment can be written in the form~\cite[Sec. 13.2.1, eq. (13.1), p. 667]{gardner2006}
+\begin{equation}
+R_{x,p}^{\alpha}(\vect{\tau})
+=
+\left\langle
+\prod_{\ell=1}^{p}
+x_{\ell}^{(*)_{\ell}}(t+\tau_{\ell})
+e^{-j2\pi\alpha t}
+\right\rangle_t ,
+\label{eq:general}
+\end{equation}
+where $(*)_{\ell}$ specifies whether the corresponding factor is conjugated, $\vect{\tau}$ collects the lags, and $\langle\cdot\rangle_t$ denotes a time average.  Set $p=1$, choose the unconjugated factor, and set its lag to zero.  The result is the cyclic mean
+\begin{equation}
+M_x^{\alpha}
+=\left\langle x(t)e^{-j2\pi\alpha t}\right\rangle_t .
+\label{eq:cyclicmeanct}
+\end{equation}
+
+For the complex discrete-time record $x[0],\ldots,x[N-1]$, with $\alpha$ measured in cycles per sample, the natural finite-record estimate is
+\begin{equation}
+\widehat M_x^{\alpha}
+=\frac{1}{N}\sum_{n=0}^{N-1}x[n]e^{-j2\pi\alpha n}.
+\label{eq:cyclicmean}
+\end{equation}
+Define
+\begin{equation}
+\vect{s}_{\alpha}
+=\begin{bmatrix}
+1 & e^{j2\pi\alpha} & \cdots & e^{j2\pi\alpha(N-1)}
+\end{bmatrix}^{T}.
+\end{equation}
+Then, for every finite $N$,
+\begin{equation}
+N\widehat M_x^{\alpha}=\vect{s}_{\alpha}^{H}\vect{x}.
+\label{eq:identity}
+\end{equation}
+
+Equation~\eqref{eq:identity} is the entire algebraic bridge.  Its right-hand side is the correlation with a length-$N$ complex sinusoid, hence a matched-filter output apart from scaling and time-origin convention.  It is also a sample of the discrete-time Fourier transform (DTFT).  If $\alpha=k/N$, it is exactly the DFT coefficient $X[k]$ under the convention
+\begin{equation}
+X[k]=\sum_{n=0}^{N-1}x[n]e^{-j2\pi kn/N}.
+\end{equation}
+For arbitrary $\alpha$, calling it a DFT bin is imprecise: it is an off-grid DTFT correlation unless a denser filter bank or interpolation is used.
+
+\section*{The detector is the same detector}
+
+The Fourier identity alone does not establish optimality.  For that, consider the one-column complex linear model~\cite[Sec. 13.4.1, pp. 484--485, eqs. (13.19)--(13.20)]{kay1998}:
+\begin{align}
+\mathcal H_0 &: \vect{x}=\vect{w},\nonumber\\
+\mathcal H_1 &: \vect{x}=a\vect{s}_{\alpha}+\vect{w},
+\qquad
+\vect{w}\sim\CN(\vect{0},\sigma^2\vect{I}),
+\label{eq:model}
+\end{align}
+where the normalized frequency $\alpha$ is known and the deterministic complex amplitude $a$ is unknown.  The log likelihood, apart from constants, is
+\begin{equation}
+\ell(a)=-\frac{1}{\sigma^2}
+\left\|\vect{x}-a\vect{s}_{\alpha}\right\|^2 .
+\end{equation}
+Completing the square and using $\vect{s}_{\alpha}^{H}\vect{s}_{\alpha}=N$ gives the maximum-likelihood estimate
+\begin{equation}
+\widehat a
+=\frac{\vect{s}_{\alpha}^{H}\vect{x}}
+{\vect{s}_{\alpha}^{H}\vect{s}_{\alpha}}
+=\widehat M_x^{\alpha},
+\label{eq:ahat}
+\end{equation}
+Substitution of~\eqref{eq:ahat} into the likelihood yields a GLRT monotone in
+\begin{equation}
+T_{\alpha}
+=\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}
+{\sigma^2\vect{s}_{\alpha}^{H}\vect{s}_{\alpha}}
+=\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}.
+\label{eq:glrt}
+\end{equation}
+
+This proves an exact finite-sample statement: the magnitude-squared, single-cycle-frequency first-order cyclic-mean detector, the periodogram tone detector, and the quadrature matched-filter GLRT define identical rejection regions under~\eqref{eq:model}.  No asymptotic approximation is involved.
+
+The same conclusion follows from the covariance-normalized form used in statistical cyclic-feature tests~\cite[Appendix B, eqs. (B.1)--(B.3), p. 11]{dobre2009}.  Let
+\begin{equation}
+\widehat{\vect{m}}
+=\begin{bmatrix}
+\operatorname{Re}\{\widehat M_x^{\alpha}\} &
+\operatorname{Im}\{\widehat M_x^{\alpha}\}
+\end{bmatrix}^{T}.
+\end{equation}
+Under $\mathcal H_0$,
+$\operatorname{cov}(\widehat{\vect{m}})=\sigma^2\vect{I}_2/(2N)$, so
+\begin{equation}
+\widehat{\vect{m}}^{T}
+\operatorname{cov}(\widehat{\vect{m}})^{-1}
+\widehat{\vect{m}}
+=\frac{2N|\widehat M_x^{\alpha}|^2}{\sigma^2}
+=2T_{\alpha}.
+\end{equation}
+The positive factor of two merely rescales the threshold.  For one channel, Kay's complex-envelope sinusoid GLRT uses this same statistic with the corresponding factor-of-two threshold convention~\cite[Sec. 13.8.1, pp. 510--514, eqs. (13.49)--(13.53)]{kay1998}.
+
+The null distribution provides an immediate threshold rule.  With the complex-noise convention in~\eqref{eq:model}, $T_{\alpha}$ is unit-mean exponential under $\mathcal H_0$.  Therefore
+\begin{equation}
+P_{\mathrm{FA}}=e^{-\gamma},
+\qquad
+\gamma=-\log P_{\mathrm{FA}}.
+\label{eq:pfa}
+\end{equation}
+Under $\mathcal H_1$,
+\begin{equation}
+2T_{\alpha}\sim
+\chi'^2_2\!\left(\frac{2N|a|^2}{\sigma^2}\right),
+\end{equation}
+which gives the usual noncoherent matched-filter detection probability.  Thus classical tone-detection performance formulas transfer directly to this first-order cyclic test.
+
+If $a$ including its phase is known, the Neyman-Pearson statistic is instead the coherent quantity
+$\operatorname{Re}\{a^*\vect{s}_{\alpha}^{H}\vect{x}\}$.  The cyclic mean remains the sufficient complex matched-filter output; the appropriate scalar decision statistic changes with the nuisance-parameter model.
+
+\begin{table}[t]
+\centering
+\caption{The same operation under several descriptions.}
+\label{tab:names}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.23\textwidth}
+                >{\raggedright\arraybackslash}p{0.32\textwidth}
+                >{\raggedright\arraybackslash}p{0.32\textwidth}}
+\toprule
+Description & Quantity & Qualification \\
+\midrule
+First-order cyclic estimate & $\widehat M_x^{\alpha}=N^{-1}\vect{s}_{\alpha}^{H}\vect{x}$ & Complex feature estimate at one cycle frequency \\
+Fourier analysis & $X[k]/N$ & Exact DFT equality only for $\alpha=k/N$ \\
+Matched filtering & $\vect{s}_{\alpha}^{H}\vect{x}$ & Complex matched-filter output for a rectangular tone \\
+Unknown-amplitude tone GLRT & $|\vect{s}_{\alpha}^{H}\vect{x}|^2/(N\sigma^2)$ & White Gaussian noise and known frequency \\
+Unknown-frequency search & $\sup_{\alpha\in\mathcal A}T_{\alpha}$ & A matched-filter bank; an FFT is one possible grid \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{A numerical identity and a practical grid penalty}
+
+Figure~\ref{fig:verification}(a) verifies the common statistic for a length-$64$ complex tone in white noise.  The simulation computes the first-order cyclic estimate and the matched-filter statistic separately; their maximum absolute numerical difference over the direct identity check is below $5\times10^{-12}$.  The plotted Monte Carlo decisions therefore coincide, and the result follows the noncentral chi-square law derived above.
+
+Figure~\ref{fig:verification}(b) illustrates a qualification hidden by the phrase ``the DFT is the detector.''  A single DFT bin is matched only to its grid frequency.  With a rectangular length-$N$ record, an offset of half a bin reduces the nearest-bin output by approximately $3.92$ dB.  The first-order cyclic estimate evaluated at the actual $\alpha$ remains the exactly tuned tone correlation.  An FFT implementation must consequently use a sufficiently dense grid, interpolation, or a subsequent frequency-refinement step when $\alpha$ is not known to lie on the DFT grid.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{equivalence_simulation.pdf}
+\caption{(a) The covariance-normalized first-order cyclic statistic and the quadrature matched-filter statistic give the same decisions; the theory uses~\eqref{eq:pfa}.  (b) Restricting the search to one DFT bin introduces the familiar rectangular-window mismatch loss.  The accompanying script reproduces both panels.}
+\label{fig:verification}
+\end{figure}
+
+\section*{Where the equivalence needs qualification}
+
+\textbf{Unknown frequency.}
+If frequency is unknown, maximizing~\eqref{eq:glrt} over a candidate set gives
+\begin{equation}
+T=\sup_{\alpha\in\mathcal A}
+\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}.
+\end{equation}
+This is a bank of tone matched filters or a peak-periodogram detector.  It is an FFT-bin search only when $\mathcal A$ is the DFT grid.  The false-alarm threshold must also account for the frequency search rather than applying~\eqref{eq:pfa} as if only one independent frequency had been tested.
+
+\textbf{Colored noise.}
+For $\vect{w}\sim\CN(\vect{0},\vect{C})$, the GLRT becomes
+\begin{equation}
+T_C=
+\frac{|\vect{s}_{\alpha}^{H}\vect{C}^{-1}\vect{x}|^2}
+{\vect{s}_{\alpha}^{H}\vect{C}^{-1}\vect{s}_{\alpha}}.
+\label{eq:colored}
+\end{equation}
+This is the matched filter after whitening.  The raw cyclic mean or raw DFT coefficient is generally not optimal.  It remains optimal when $\vect{C}^{-1}\vect{s}_{\alpha}$ is proportional to $\vect{s}_{\alpha}$, which includes white noise and some idealized circulant covariance models.
+
+\textbf{Real tones.}
+A real sinusoid has positive- and negative-frequency components.  Detection with unknown amplitude and phase projects onto the sine-cosine subspace.  At a non-DC, non-Nyquist DFT bin those two quadratures are orthogonal, and the statistic reduces to a scaled $|X[k]|^2$.  Off grid, the Gram-matrix normalization of the two regressors should be retained rather than assumed diagonal.
+
+\textbf{Multiple harmonics.}
+A general periodic mean can contain several Fourier components.  Testing its complete first-order signature is then a matched-subspace problem, not a single matched filter.  If the harmonics lie on distinct DFT bins in white noise, the joint statistic is the sum of their normalized bin energies.  The single-$\alpha$ identity applies to each component separately.
+
+\textbf{Windowing.}
+Equation~\eqref{eq:cyclicmean} uses a rectangular observation interval.  A tapered cyclic estimate is still a windowed sinusoidal correlator, but it is no longer the white-noise matched filter for a constant-envelope, rectangularly observed tone unless that taper models the actual signal envelope.  Tapering exchanges coherent SNR for reduced leakage.
+
+\textbf{Random ensemble phase.}
+The most important conceptual boundary concerns what is meant by ``first-order cyclostationarity.''  Consider
+\begin{equation}
+X[n]=Ae^{j(2\pi\alpha_0 n+\Phi)}+W[n],
+\qquad \Phi\sim\operatorname{Unif}[0,2\pi),
+\label{eq:randomphase}
+\end{equation}
+where $\Phi$ is drawn once and held fixed within each realization.  Ensemble averaging gives $\E\{X[n]\}=0$, so the ensemble first-order cyclic mean vanishes.  Conditional on the realized phase and ignoring noise, however,
+\begin{equation}
+\widehat M_X^{\alpha_0}=Ae^{j\Phi},
+\end{equation}
+and $|\widehat M_X^{\alpha_0}|^2$ remains fully detectable.  Complex averaging across independently phase-randomized records can cancel; noncoherent magnitude-square combining does not.
+
+Accordingly, the assumption-free identity is between the \emph{finite-record cyclic-mean estimate} and the tone correlator.  Equating tone presence with a nonzero \emph{ensemble} first-order cyclic mean additionally requires a phase reference or an appropriate first-order cycloergodicity condition.
+
+\section*{Why second and higher orders receive more attention}
+
+The relative prominence of second-order and higher-order cyclostationarity does not imply that first order was unknown.  First order identifies a periodic mean or spectral line~\cite[Sec. 2.1, pp. 15--16, eqs. (1)--(3)]{gardner1986}.  Second-order processing creates spectral lines from lag products of the signal, exposing periodic covariance structure even when the ordinary mean is zero~\cite[Sec. 8.1, p. 663, eqs. (8.1)--(8.3)]{gardner2006}.  Estimation and testing methods, including higher-order extensions, are developed in broader cyclic-statistics frameworks~\cite[Secs. 4.1, 11, and 13.2]{gardner2006}.
+
+The first-order case therefore sits at an unusually simple intersection.  Cyclostationary terminology emphasizes the Fourier coefficient of the time-varying mean; Fourier terminology emphasizes a spectral line; detection terminology emphasizes correlation with a known waveform.  None of these views is more fundamental.  Under the stated model they are coordinate systems for the same sufficient statistic.
+
+\section*{Practical takeaways}
+
+\begin{itemize}
+\item A single-cycle-frequency first-order cyclic estimator does not require a specialized implementation.  It can be computed as a complex mixer followed by an accumulator, as a DTFT evaluation, or as an FFT bin when the frequency is on grid.
+\item Matched-filter threshold and performance results can be reused directly after aligning normalizations.  For the complex white-noise model used here, $N|\widehat M_x^{\alpha}|^2/\sigma^2$ is unit-mean exponential under the null.
+\item ``DFT,'' ``matched filter,'' and ``first-order cyclic detector'' should not be counted as three independent detectors in a comparison when they use the same record, frequency, window, and normalization.  They are the same statistic with different labels.
+\item The implementation should change when the assumptions change: search or interpolate for unknown frequency, whiten for colored noise, use two real quadratures for a real tone, and use a subspace statistic for multiple harmonics.
+\item A nonzero finite-record tone statistic need not imply a nonzero ensemble cyclic mean.  Phase coherence and averaging conventions must be stated.
+\end{itemize}
+
+\section*{Concluding perspective}
+
+The algebraic reduction from first-order cyclostationarity to a Fourier coefficient is immediate.  Its detector interpretation is equally exact once the statistical model is made explicit.  For a known-frequency complex tone of unknown amplitude in white Gaussian noise, the standard covariance-normalized first-order cyclic-mean test is, up to scale, the periodogram and quadrature matched-filter GLRT.  Gardner's first-order periodicity result, Dobre et al.'s DFT-implemented first-order cyclic estimator and covariance-normalized test, and classical complex-sinusoid detection theory contain the constituent pieces.  Writing the pieces as one proposition is useful because it removes redundant terminology, imports mature matched-filter performance theory into the first-order cyclic setting, and exposes the assumptions that are otherwise easy to overlook.  The identity is simple; knowing precisely when to use it is the practical trick.
+
+\section*{Acknowledgment}
+
+The author thanks [person or institution] for [specific assistance].  The author declares no relevant financial or nonfinancial conflicts of interest.
+
+\begin{thebibliography}{5}
+\bibliographystyle{IEEEtran}
+
+\bibitem{gardner1986}
+W. A. Gardner, ``The spectral correlation theory of cyclostationary time-series,''
+\emph{Signal Processing}, vol. 11, no. 1, pp. 13--36, Jul. 1986,
+doi: \href{https://doi.org/10.1016/0165-1684(86)90092-7}{10.1016/0165-1684(86)90092-7}.
+See also ``Erratum,'' \emph{Signal Processing}, vol. 11, no. 4, p. 405, Dec. 1986,
+doi: \href{https://doi.org/10.1016/0165-1684(86)90080-0}{10.1016/0165-1684(86)90080-0}.
+
+\bibitem{gardner2006}
+W. A. Gardner, A. Napolitano, and L. Paura, ``Cyclostationarity: Half a century of research,''
+\emph{Signal Processing}, vol. 86, no. 4, pp. 639--697, Apr. 2006,
+doi: \href{https://doi.org/10.1016/j.sigpro.2005.06.016}{10.1016/j.sigpro.2005.06.016}.
+
+\bibitem{dobre2009}
+O. A. Dobre, S. Rajan, and R. Inkol, ``Joint signal detection and classification based on first-order cyclostationarity for cognitive radios,''
+\emph{EURASIP Journal on Advances in Signal Processing}, vol. 2009, Art. ID 656719, 12 pp., 2009,
+doi: \href{https://doi.org/10.1155/2009/656719}{10.1155/2009/656719}.
+
+\bibitem{kay1998}
+S. M. Kay, \emph{Fundamentals of Statistical Signal Processing, Volume II: Detection Theory}.
+Upper Saddle River, NJ, USA: Prentice Hall PTR, 1998.
+
+\bibitem{spooner2009}
+C. M. Spooner and R. B. Nicholls, ``Spectrum sensing based on spectral correlation,''
+in \emph{Cognitive Radio Technology}, 2nd ed., B. A. Fette, Ed.
+Burlington, MA, USA: Academic Press, 2009, ch. 18, pp. 593--634,
+doi: \href{https://doi.org/10.1016/B978-0-12-374535-4.00018-7}{10.1016/B978-0-12-374535-4.00018-7}.
+
+\end{thebibliography}
+
+\end{document}
