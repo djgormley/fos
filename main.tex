@@ -328,12 +328,11 @@ At first order, the cyclic moment is the cyclic mean, and its $N$-sample estimat
 \end{equation*}
 This equality holds at every evaluated $\alpha$; only replacing $X_N(\alpha)$ by the DFT coefficient $X[k]$ requires $\alpha=k/N$.  Colored noise uses the standard covariance-weighted, or whitened, statistic in~\eqref{eq:colored}; real tones, multiple harmonics, and random ensemble phase require the modifications described above.
 
-Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, the normalized cyclic-mean energy, Fourier energy, and matched-filter energy are the same GLRT statistic:
+Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, the title becomes the final equality:
 \begin{equation*}
 \boxed{
-\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}
-=\frac{|X_N(\alpha)|^2}{N\sigma^2}
-=\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}
+\underbrace{\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}}_{\text{first-order cyclostationarity statistic}}
+=\underbrace{\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}}_{\text{tone matched-filter statistic}}
 =T_{\alpha}.
 }
 \end{equation*}
