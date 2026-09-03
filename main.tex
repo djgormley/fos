@@ -322,17 +322,38 @@ At first order, the cyclic moment is the cyclic mean, and the finite-record chai
 \begin{equation*}
 \boxed{
 \begin{aligned}
-\widehat M_x^{\alpha}
-&=\frac{X_N(\alpha)}{N}
+R_{x,1}^{\alpha}
+&
+=\widehat M_x^{\alpha}
+=\frac{X_N(\alpha)}{N}
 =\frac{\vect{s}_{\alpha}^{H}\vect{x}}{N},\\
 T_{\alpha}
-&=\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}
+&
+=\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}
 =\frac{|X_N(\alpha)|^2}{N\sigma^2}
-=\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}.
+=\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}
+=\frac{N|R_{x,1}^{\alpha}|^2}{\sigma^2}.
 \end{aligned}
 }
 \end{equation*}
 In words, the first row says that the finite-record cyclic-mean estimate is the normalized length-$N$ DTFT sample and the normalized complex-tone correlation.  Only when $\alpha=k/N$ is the Fourier sample an $N$-point DFT coefficient.
+
+\begin{equation*}
+\boxed{
+\begin{aligned}
+T_{\alpha}
+&
+=\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}
+=\frac{|X_N(\alpha)|^2}{N\sigma^2}
+=\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}
+=\frac{N|R_{x,1}^{\alpha}|^2}{\sigma^2} \\
+R_{x,1}^{\alpha}
+&
+
+\end{aligned}
+}
+\end{equation*}
+
 
 The second row says that $T_{\alpha}$ is the squared magnitude of this common output divided by its noise-only variance, whether calculated from the cyclic mean, DTFT sample, or tone correlation.  With known colored covariance, optimality instead requires the covariance-weighted statistic $T_C$ in~\eqref{eq:colored}, which whitens both the record and the template.  Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, the complex-tone correlation is the matched-filter output.  Thus, under this model, the first-order cyclostationarity statistic is the tone matched-filter GLRT statistic.
 
