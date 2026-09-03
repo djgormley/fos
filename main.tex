@@ -51,7 +51,7 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 \maketitle
 \section*{}
 \label{sec:introduction}
-\IEEEPARstart{T}{he} first-order cyclostationarity statistic considered here is formed from the cyclic mean, the order-one cyclic moment.  At a candidate cycle frequency, its finite-record estimate counter-rotates the record and averages.  For a rectangular $N$-sample record, this estimate is a normalized discrete-time Fourier transform (DTFT) evaluation and a normalized complex-tone matched-filter output.  On the discrete Fourier transform (DFT) grid, that Fourier sample is exactly a normalized DFT coefficient.  Under a known-frequency tone model in proper complex white Gaussian noise of known variance, the normalized squared magnitude of the same output is the unknown-complex-amplitude tone generalized likelihood-ratio test (GLRT).  Thus, computing the statistic reduces to tone matched filtering followed by normalization and thresholding.  We develop the exact identity, isolate the FFT-grid trap, and then separate standard detector extensions from the ensemble-interpretation caveat.
+\IEEEPARstart{T}{he} first-order cyclostationarity statistic considered here is formed from the cyclic mean, the order-one cyclic moment.  At a candidate cycle frequency, its finite-record estimate counter-rotates the record and averages.  For a rectangular $N$-sample record, this estimate is a normalized discrete-time Fourier transform (DTFT) evaluation and a normalized complex-tone matched-filter output.  On the discrete Fourier transform (DFT) grid, that Fourier sample is exactly a normalized DFT coefficient.  Under a known-frequency tone model in proper complex white Gaussian noise of known variance, the normalized squared magnitude of the same output is the unknown-complex-amplitude tone generalized likelihood-ratio test (GLRT).  Thus, computing the statistic reduces to tone matched filtering followed by normalization and thresholding.  We develop the exact identity, explain the shared FFT-grid issue, and then separate standard detector extensions from the ensemble-interpretation caveat.
 
 \section*{The Trick: Phase Correction}
 
@@ -180,8 +180,8 @@ We obtain the same conclusion from the covariance-normalized form used for stati
 \begin{equation}
 \widehat{\vect{m}}
 =\begin{bmatrix}
-\operatorname{Re}\{\widehat M_x^{\alpha}\} &
-\operatorname{Im}\{\widehat M_x^{\alpha}\}
+\Re\{\widehat M_x^{\alpha}\} &
+\Im\{\widehat M_x^{\alpha}\}
 \end{bmatrix}^{T}.
 \end{equation}
 Under $\mathcal H_0$,
@@ -220,7 +220,7 @@ Under $\mathcal H_1$,
 which gives the standard noncoherent matched-filter detection probability.  Therefore, classical tone-detection performance expressions can be applied directly to the test based on $T_{\alpha}$.
 
 If $a$, including its phase, is known, the Neyman-Pearson statistic is instead the coherent quantity
-$\operatorname{Re}\{a^*\vect{s}_{\alpha}^{H}\vect{x}\}$.  The finite-record estimate $\widehat M_x^{\alpha}$ remains a scaled version of the sufficient complex matched-filter output.  However, the scalar decision statistic changes with the nuisance-parameter model.
+$\Re\{a^*\vect{s}_{\alpha}^{H}\vect{x}\}$.  The finite-record estimate $\widehat M_x^{\alpha}$ remains a scaled version of the sufficient complex matched-filter output.  However, the scalar decision statistic changes with the nuisance-parameter model.
 
 \begin{table}[t]
 \centering
@@ -234,13 +234,13 @@ $\operatorname{Re}\{a^*\vect{s}_{\alpha}^{H}\vect{x}\}$.  The finite-record esti
 Role & Statement & What matters \\
 \midrule
 Core identity & $\widehat M_x^{\alpha}=X_N(\alpha)/N=\vect{s}_{\alpha}^{H}\vect{x}/N$ & Exact at every candidate $\alpha$; no FFT grid is required. \\
-FFT-grid trap & $\widehat M_x^{k/N}=X[k]/N$ & An $N$-point DFT bin is exact only for $\alpha=k/N$.  Off grid, evaluate the DTFT directly or use a denser or refined frequency search. \\
+Shared FFT-grid issue & $\widehat M_x^{k/N}=X[k]/N$ & A single $N$-point bin gives the exact sample when $\alpha=k/N$.  Off grid, use the same interpolation, direct evaluation, or refinement used in conventional cyclic-spectrum processing; this is not unique to first order. \\
 Detector consequence & $T_{\alpha}=N|\widehat M_x^{\alpha}|^2/\sigma^2$ & The stated GLRT assumes one preassigned $\alpha$ and the white-noise tone model.  A frequency search changes the false-alarm threshold; colored noise uses the standard whitened form. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The first row is the central result.  Only the DFT-bin shortcut requires $\alpha=k/N$; the cyclic-mean, DTFT, and tone-correlator identity remains exact off grid.  The last row qualifies the optimality and threshold claim, not the algebraic identity.
+The first row is the central result.  Only the DFT-bin shortcut requires $\alpha=k/N$; the cyclic-mean, DTFT, and tone-correlator identity remains exact off grid.  This is the same grid-alignment issue encountered in FFT-based higher-order cyclic-spectrum estimation, not a restriction of the first-order identity.  The last row qualifies the optimality and threshold claim, not the algebraic identity.
 
 \section*{Numerical Verification and Grid Mismatch}
 
