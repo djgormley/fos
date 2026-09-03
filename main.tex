@@ -318,28 +318,28 @@ For a finite record, estimating one such coefficient computes $\widehat M_x^{\al
 \newpage
 \section*{Conclusion}
 
-At first order, the cyclic moment is the cyclic mean, and its $N$-sample estimate obeys
-\begin{equation*}
-\widehat M_x^{\alpha}
-=\frac{X_N(\alpha)}{N}
-=\frac{\vect{s}_{\alpha}^{H}\vect{x}}{N}.
-\end{equation*}
-In words, the finite-record cyclic-mean estimate is exactly the normalized length-$N$ DTFT sample and the normalized complex-tone correlation.  For the white-noise tone model used here, the complex-tone correlation is the matched-filter output.  Only when $\alpha=k/N$ is the Fourier sample an $N$-point DFT coefficient.
-
-With known colored covariance, optimality instead requires the covariance-weighted statistic $T_C$ in~\eqref{eq:colored}, which whitens both the record and the template and is generally not an unweighted cyclic-mean or DFT-bin energy.  Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, the corresponding statistic is
+At first order, the cyclic moment is the cyclic mean, and the finite-record chain through its normalized energy statistic is
 \begin{equation*}
 \boxed{
+\begin{aligned}
+\widehat M_x^{\alpha}
+&=\frac{X_N(\alpha)}{N}
+=\frac{\vect{s}_{\alpha}^{H}\vect{x}}{N},\\
 T_{\alpha}
-=\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}
+&=\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}
+=\frac{|X_N(\alpha)|^2}{N\sigma^2}
 =\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}.
+\end{aligned}
 }
 \end{equation*}
-In words, $T_{\alpha}$ is the squared magnitude of the cyclic-mean estimate divided by its noise-only variance.  Equivalently, it is the squared magnitude of the tone matched-filter output divided by its noise-only variance.  Thus, under this model, the first-order cyclostationarity statistic is the tone matched-filter statistic.
+In words, the first row says that the finite-record cyclic-mean estimate is the normalized length-$N$ DTFT sample and the normalized complex-tone correlation.  Only when $\alpha=k/N$ is the Fourier sample an $N$-point DFT coefficient.
+
+The second row says that $T_{\alpha}$ is the squared magnitude of this common output divided by its noise-only variance, whether calculated from the cyclic mean, DTFT sample, or tone correlation.  With known colored covariance, optimality instead requires the covariance-weighted statistic $T_C$ in~\eqref{eq:colored}, which whitens both the record and the template.  Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, the complex-tone correlation is the matched-filter output.  Thus, under this model, the first-order cyclostationarity statistic is the tone matched-filter GLRT statistic.
 
 % Add any acknowledgments and required conflict-of-interest statement before submission.
 \section*{Acknowledgements}
 
-The authors dela
+The authors declare no known conflicts of interest.
 
 \begin{thebibliography}{5}
 \bibliographystyle{IEEEtran}
