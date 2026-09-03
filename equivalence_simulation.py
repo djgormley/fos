@@ -34,9 +34,13 @@ def main() -> None:
         + 1j * rng.standard_normal((check_trials, N))
     )
     x = a_check * s[None, :] + w
-    cyclic_mean = (x @ np.conj(s)) / N
+    phase_correction = np.exp(-1j * 2 * np.pi * alpha * n)
+    cyclic_mean = np.mean(x * phase_correction[None, :], axis=1)
     t_cyclic = N * np.abs(cyclic_mean) ** 2 / sigma2
-    t_matched = np.abs(x @ np.conj(s)) ** 2 / (sigma2 * np.vdot(s, s).real)
+    matched_output = x @ np.conj(s)
+    t_matched = np.abs(matched_output) ** 2 / (
+        sigma2 * np.vdot(s, s).real
+    )
     max_identity_error = np.max(np.abs(t_cyclic - t_matched))
     if max_identity_error > 5e-12:
         raise RuntimeError(f"Identity check failed: {max_identity_error:g}")

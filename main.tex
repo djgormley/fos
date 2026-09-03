@@ -199,7 +199,15 @@ P_{\mathrm{FA}}=e^{-\gamma},
 \gamma=-\log P_{\mathrm{FA}}.
 \label{eq:pfa}
 \end{equation}
-Thus, a direct implementation counter-rotates and sums to obtain $u_{\alpha}=\vect{s}_{\alpha}^{H}\vect{x}$, forms $T_{\alpha}=|u_{\alpha}|^2/(N\sigma^2)$, and decides $\mathcal H_1$ when $T_{\alpha}>\gamma$.  This threshold is exact for one preassigned $\alpha$ when $\sigma^2$ is known.  If the variance is estimated, the null distribution and threshold must account for the variance estimator and any independent training data.
+\begin{samepage}
+The direct implementation has three steps:
+\begin{enumerate}
+\item Counter-rotate and sum: $u_{\alpha}=\vect{s}_{\alpha}^{H}\vect{x}$.
+\item Normalize: $T_{\alpha}=|u_{\alpha}|^2/(N\sigma^2)$.
+\item Threshold: decide $\mathcal H_1$ when $T_{\alpha}>\gamma$.
+\end{enumerate}
+The final step is exact for one preassigned $\alpha$ when $\sigma^2$ is known.  If the variance is estimated, the null distribution and threshold must account for the variance estimator and any independent training data.
+\end{samepage}
 Under $\mathcal H_1$,
 \begin{equation}
 2T_{\alpha}\sim
@@ -233,14 +241,14 @@ Unknown-frequency search & $\sup_{\alpha\in\mathcal A}T_{\alpha}$ & A matched-fi
 
 \section*{Numerical Verification and Grid Mismatch}
 
-We first verify the common statistic using a length-$64$ complex tone in white noise.  The simulation computes $T_{\alpha}$ from its cyclic-mean and matched-filter forms, with a maximum absolute difference below $5\times10^{-12}$.  Following this direct check, we perform $80{,}000$ Monte Carlo trials at $P_{\mathrm{FA}}=0.01$ using a fixed random seed.  As shown in Figure~\ref{fig:verification}(a), the detection probability follows the noncentral chi-square law derived above.
+We first verify the common statistic using a length-$64$ complex tone in white noise.  The simulation computes $T_{\alpha}$ independently from its counter-rotate-and-average and matched-filter forms, with a maximum absolute difference below $5\times10^{-12}$.  Following this direct check, we perform $80{,}000$ Monte Carlo trials at $P_{\mathrm{FA}}=0.01$ using random seed 20260902.  As shown in Figure~\ref{fig:verification}(a), the detection probability follows the noncentral chi-square law derived above.  The script and version-pinned direct-dependency list used to reproduce Figure~\ref{fig:verification} are available at \url{https://github.com/djgormley/fos}.
 
 Next, we evaluate $T_{\alpha}$ at a single DFT bin.  This bin is matched only to its center frequency.  For a rectangular length-$N$ record, a half-bin tone offset reduces the single-bin output by approximately $3.92$ dB, as shown in Figure~\ref{fig:verification}(b).  In comparison, the cyclic-mean estimate evaluated at the true $\alpha$ remains exactly tuned.  Therefore, when $\alpha$ is not on the DFT grid, a fast Fourier transform (FFT) implementation requires a denser grid, interpolation, or a frequency-refinement stage.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{equivalence_simulation.pdf}
-\caption{(a) Monte Carlo detection probability for $T_{\alpha}$, computed in its cyclic-mean and quadrature matched-filter forms.  The theoretical curve uses the threshold in~\eqref{eq:pfa} and the distribution in~\eqref{eq:noncentral}.  (b) Evaluating the statistic at only one DFT bin introduces rectangular-window mismatch loss.  The accompanying script reproduces both results.}
+\caption{(a) Monte Carlo detection probability for the common statistic $T_{\alpha}$.  The theoretical curve uses the threshold in~\eqref{eq:pfa} and the distribution in~\eqref{eq:noncentral}.  (b) Evaluating the statistic at only one DFT bin introduces rectangular-window mismatch loss.  The repository script reproduces both results.}
 \label{fig:verification}
 \end{figure}
 
