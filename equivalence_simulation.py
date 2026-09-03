@@ -1,8 +1,9 @@
-"""Generate the numerical verification results for the accompanying manuscript.
+"""
+Generate the numerical verification results for the accompanying manuscript.
 
-We first verify the finite-record test-statistic identity. Next, we estimate the
-detection probability of the common statistic. Lastly, we evaluate the loss
-caused by evaluating an off-grid tone with a single DFT bin.
+First verify the finite-record test-statistic identity. 
+Next, we estimate the detection probability of the common statistic. 
+Last, we evaluate the loss caused by evaluating an off-grid tone with a single DFT bin.
 """
 
 from pathlib import Path

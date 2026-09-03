@@ -1,7 +1,3 @@
-% Official IEEE Signal Processing Magazine Columns & Forum submission format.
-% Template package: IEEE-SPM-C&F-Templates_LaTeX.zip, retrieved from the
-% IEEE Template Selector on September 2, 2026. The underlying official
-% template identifies itself as modified by the C&F editors on June 10, 2024.
 \documentclass[11pt,draftcls,onecolumn,journal]{IEEEtran}
 
 \usepackage{amsmath,amsfonts}
@@ -33,8 +29,7 @@
 \newcommand{\CN}{\mathcal{CN}}
 \newcommand{\vect}[1]{\bm{#1}}
 
-\title{Tip-- A First-Order Cyclostationarity Statistic\\
-Reduces to Tone Matched Filtering\\
+\title{A First-Order Cyclostationarity Statistic Reduces to Tone Matched Filtering\\
 {\large The Equivalence Chain and Its Conditions}}
 
 \author{Dylan~J.~Gormley and Kevin~M.~Bandura%
@@ -53,7 +48,7 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 \label{sec:introduction}
 \IEEEPARstart{T}{he} first-order cyclostationarity statistic considered here is formed from the cyclic mean, the order-one cyclic moment.  At a candidate cycle frequency, its finite-record estimate counter-rotates the record and averages.  For a rectangular $N$-sample record, this estimate is a normalized discrete-time Fourier transform (DTFT) evaluation and a normalized complex-tone matched-filter output.  On the discrete Fourier transform (DFT) grid, that Fourier sample is exactly a normalized DFT coefficient.  Under a known-frequency tone model in proper complex white Gaussian noise of known variance, the normalized squared magnitude of the same output is the unknown-complex-amplitude tone generalized likelihood-ratio test (GLRT).  Thus, computing the statistic reduces to tone matched filtering followed by normalization and thresholding.  We develop the exact identity, explain the shared FFT-grid issue, and then separate standard detector extensions from the ensemble-interpretation caveat.
 
-\section*{The Trick: Phase Correction}
+\section*{The Trick:  Phase Correction}
 
 At first order, the cyclic moment is the cyclic mean.  Its finite-record estimate is obtained by counter-rotating at the candidate cycle frequency and averaging---the same operation that evaluates a finite-record DTFT sample and correlates the record with a complex tone.  Consider the complex record $x[0],\ldots,x[N-1]$, and let $\alpha$ denote the candidate frequency in cycles per sample.  An ordinary finite-record sample mean extracts zero frequency, so a component at nonzero $\alpha$ is generally attenuated by phase cancellation.  Define the phase-corrected samples as $z_{\alpha}[n]\equiv x[n]e^{-j2\pi\alpha n}$.  A matching component then moves to zero frequency, and the finite-record cyclic-mean estimate is the ordinary sample mean of the corrected sequence:
 \begin{equation}
@@ -115,7 +110,7 @@ Thus, the unconjugated coefficients at both signs of $\alpha$ determine the conj
 \begin{equation*}
 R_{x,1}^{\alpha}(\tau)
 =\left\langle x(t+\tau)e^{-j2\pi\alpha t}\right\rangle_t
-=e^{j2\pi\alpha\tau}R_{x,1}^{\alpha}(0).
+=R_{x,1}^{\alpha}(0)e^{j2\pi\alpha\tau}.
 \end{equation*}
 This common shift changes the coefficient only by the known phase $e^{j2\pi\alpha\tau}$.  Adopting the reduced-dimension convention $\tau=0$ therefore loses no information, and the time-average first-order cyclic moment, or cyclic mean, is
 \begin{equation}
@@ -244,7 +239,8 @@ The first row is the central result.  Only the DFT-bin shortcut requires $\alpha
 
 \section*{Numerical Verification and Grid Mismatch}
 
-We first verify the common statistic using a length-$64$ complex tone in white noise.  The simulation computes $T_{\alpha}$ independently from its counter-rotate-and-average and matched-filter forms, with a maximum absolute difference below $5\times10^{-12}$.  Following this direct check, we perform $80{,}000$ Monte Carlo trials at $P_{\mathrm{FA}}=0.01$ using random seed 20260902.  As shown in Figure~\ref{fig:verification}(a), the detection probability follows the noncentral chi-square law derived above.  The script and version-pinned direct-dependency list used to reproduce Figure~\ref{fig:verification} are available at \url{https://github.com/djgormley/fos}.
+We first verify the common statistic using a length-$64$ complex tone in white noise.  The simulation computes $T_{\alpha}$ independently from its counter-rotate-and-average and matched-filter forms, with a maximum absolute difference below $5\times10^{-12}$.  Following this direct check, we perform $80{,}000$ Monte Carlo trials at $P_{\mathrm{FA}}=0.01$ using random seed 20260902.  As shown in Figure~\ref{fig:verification}(a), the detection probability follows the noncentral chi-square law derived above.  
+%The script and version-pinned direct-dependency list used to reproduce Figure~\ref{fig:verification} are available at \url{https://github.com/djgormley/fos}.
 
 Next, we evaluate $T_{\alpha}$ at a single DFT bin.  This bin is matched only to its center frequency.  For a rectangular length-$N$ record, a half-bin tone offset reduces the single-bin output by approximately $3.92$ dB, as shown in Figure~\ref{fig:verification}(b).  In comparison, the cyclic-mean estimate evaluated at the true $\alpha$ remains exactly tuned.  Therefore, when $\alpha$ is not on the DFT grid, a fast Fourier transform (FFT) implementation requires a denser grid, interpolation, or a frequency-refinement stage.
 
@@ -330,7 +326,9 @@ The same finite-record quantity is therefore a cyclic-mean estimate, a Fourier s
 
 The identity lets first-order cyclic processing inherit standard tone-detector implementations, thresholds, and performance expressions, but only under matching assumptions.  Off grid the equality is to a DTFT sample rather than an $N$-point DFT bin; colored noise requires covariance weighting, equivalently whitening both the data and tone template; real tones, multiple harmonics, and random ensemble phase require the modifications described above.
 
-% Add any acknowledgments and required conflict-of-interest statement before submission.
+\section*{Acknowledgements}
+
+The authors declare no known conflicts-of-interest.
 
 \begin{thebibliography}{5}
 \bibliographystyle{IEEEtran}

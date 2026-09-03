@@ -28,15 +28,15 @@ loss of approximately:
 half-bin loss: -3.922 dB
 ```
 
-The Monte Carlo result uses 80,000 trials, a record length of 64 samples, and
-a false-alarm probability of 0.01. The script also checks the cyclic-mean and
-matched-filter forms directly and raises an error if their maximum difference
-exceeds `5e-12`.
+The Monte Carlo result uses 80,000 trials, a record length of 64 samples, 
+and a false-alarm probability of 0.01. The script also checks the cyclic-mean 
+and matched-filter forms directly and raises an error if their maximum 
+difference exceeds `5e-12`.
 
 ## Build the manuscript
 
-The manuscript was tested with Latexmk 4.83 and pdfTeX from TeX Live 2023. It
-uses the `IEEEtran` class.
+The manuscript was tested with Latexmk 4.83 and pdfTeX from TeX Live 2023. 
+It uses the `IEEEtran` class.
 
 ```bash
 mkdir -p tmp/pdfs
