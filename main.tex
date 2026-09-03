@@ -54,9 +54,9 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 
 \section*{Background}
 
-Wide-sense cyclostationarity is commonly described using periodic second-order moments and spectral correlation.  For a complex time series, the conjugate and nonconjugate autocorrelations provide the relevant second-order coefficients.  Lag-product processing then converts their periodic components into spectral lines~\cite[Secs. 3.3--3.5, pp. 646--649; Sec. 8.1, p. 663]{gardner2006}.  Higher-order cyclic moments and cumulants extend this construction beyond second order~\cite[Sec. 13.2, pp. 667--669]{gardner2006}.
+Wide-sense cyclostationarity is commonly described using periodic second-order moments and spectral correlation.  For a complex time series, the conjugate and nonconjugate autocorrelations provide the relevant second-order coefficients.  Lag-product processing then converts their periodic components into spectral lines~\cite[pp. 646--649 and 663]{gardner2006}.  Higher-order cyclic moments and cumulants extend this construction beyond second order~\cite[pp. 667--669]{gardner2006}.
 
-First-order cyclostationarity is simpler.  Gardner shows that a finite additive sinusoid in a real time series is equivalent to a nonzero time-average Fourier coefficient.  He calls this property first-order periodicity and develops the finite-window exponential extractor~\cite[Sec. 2.1, pp. 15--16, eqs. (1)--(3); Sec. 2.2, p. 18, eqs. (17)--(21)]{gardner1986}.  Dobre, Rajan, and Inkol later apply first-order cyclostationarity to joint detection and classification~\cite[Sec. 4.1, pp. 4--5]{dobre2009}.  They define the estimator in Eq. (9)~\cite[Sec. 3.1, eq. (9), p. 3]{dobre2009} and observe that it ``practically represents'' the DFT of the data~\cite[Sec. 6.2.1, p. 7]{dobre2009}.  In detection theory, Kay derives the unknown-amplitude-and-phase GLRT for a complex deterministic tone as a periodogram, or quadrature matched filter~\cite[Sec. 13.8.1, pp. 510--514, eqs. (13.49)--(13.53)]{kay1998}.  Spooner and Nicholls similarly describe tone detection as a matched-filter detector implemented using matched filtering or Fourier analysis~\cite[Sec. 18.1.4, p. 600]{spooner2009}.
+First-order cyclostationarity is simpler.  Gardner shows that a finite additive sinusoid in a real time series is equivalent to a nonzero time-average Fourier coefficient.  He calls this property first-order periodicity and develops the finite-window exponential extractor~\cite[eqs. (1)--(3) and (17)--(21)]{gardner1986}.  Dobre, Rajan, and Inkol later apply first-order cyclostationarity to joint detection and classification~\cite[pp. 4--5]{dobre2009}.  They define the estimator in Eq. (9)~\cite[eq. (9)]{dobre2009} and observe that it ``practically represents'' the DFT of the data~\cite[p. 7]{dobre2009}.  In detection theory, Kay derives the unknown-amplitude-and-phase GLRT for a complex deterministic tone as a periodogram, or quadrature matched filter~\cite[eqs. (13.49)--(13.53)]{kay1998}.  Spooner and Nicholls similarly describe tone detection as a matched-filter detector implemented using matched filtering or Fourier analysis~\cite[p. 600]{spooner2009}.
 
 These references provide the individual relationships between the cyclic mean, Fourier coefficient, and matched-filter output.  However, none of the reviewed sources states the complete normalized detector identity.  Our contribution is to combine and clarify the existing results, rather than claim the algebra as new:
 
@@ -71,7 +71,7 @@ This claim is intentionally limited.  It does not apply to every first-order pro
 
 \section*{The First-Order Cyclic Mean}
 
-We begin with the general $p$th-order cyclic temporal cross-moment~\cite[Sec. 13.2.1, eq. (13.1), p. 667]{gardner2006}:
+We begin with the general $p$th-order cyclic temporal cross-moment~\cite[eq. (13.1)]{gardner2006}:
 \begin{equation}
 R_{x,p}^{\alpha}(\vect{\tau})
 =
@@ -116,7 +116,7 @@ For an arbitrary value of $\alpha$, however, the result does not necessarily cor
 
 \section*{Detector Equivalence}
 
-The Fourier identity alone does not establish optimality.  To do so, we begin with the one-column complex linear model~\cite[Sec. 13.4.1, pp. 484--485, eqs. (13.19)--(13.20)]{kay1998}:
+The Fourier identity alone does not establish optimality.  To do so, we begin with the one-column complex linear model~\cite[eqs. (13.19)--(13.20)]{kay1998}:
 \begin{align}
 \mathcal H_0 &: \vect{x}=\vect{w},\nonumber\\
 \mathcal H_1 &: \vect{x}=a\vect{s}_{\alpha}+\vect{w},
@@ -148,7 +148,7 @@ T_{\alpha}
 
 Equation~\eqref{eq:glrt} provides an exact finite-sample result.  Under~\eqref{eq:model}, the magnitude-squared first-order cyclic-mean detector at one cycle frequency, the periodogram tone detector, and the quadrature matched-filter GLRT produce identical rejection regions without an asymptotic approximation.
 
-We obtain the same conclusion from the covariance-normalized form used for statistical cyclic-feature tests~\cite[Appendix B, eqs. (B.1)--(B.3), p. 11]{dobre2009}.  Let
+We obtain the same conclusion from the covariance-normalized form used for statistical cyclic-feature tests~\cite[eqs. (B.1)--(B.3)]{dobre2009}.  Let
 \begin{equation}
 \widehat{\vect{m}}
 =\begin{bmatrix}
@@ -165,7 +165,7 @@ $\operatorname{cov}(\widehat{\vect{m}})=\sigma^2\vect{I}_2/(2N)$, so
 =\frac{2N|\widehat M_x^{\alpha}|^2}{\sigma^2}
 =2T_{\alpha}.
 \end{equation}
-The positive factor of two changes only the threshold scale.  For one channel, Kay's complex-envelope sinusoid GLRT uses the same statistic with the corresponding factor-of-two threshold convention~\cite[Sec. 13.8.1, pp. 510--514, eqs. (13.49)--(13.53)]{kay1998}.
+The positive factor of two changes only the threshold scale.  For one channel, Kay's complex-envelope sinusoid GLRT uses the same statistic with the corresponding factor-of-two threshold convention~\cite[eqs. (13.49)--(13.53)]{kay1998}.
 
 We next determine the threshold from the null distribution.  Using the complex-noise convention in~\eqref{eq:model}, $T_{\alpha}$ has a unit-mean exponential distribution under $\mathcal H_0$.  Therefore,
 \begin{equation}
@@ -265,7 +265,7 @@ The assumption-free identity is between the \emph{finite-record cyclic-mean esti
 
 \section*{Relationship to Higher-Order Cyclostationarity}
 
-The emphasis on second- and higher-order cyclostationarity does not make the first-order result new.  First-order processing identifies a periodic mean, or spectral line~\cite[Sec. 2.1, pp. 15--16, eqs. (1)--(3)]{gardner1986}.  Second-order processing forms lag products and converts their periodic components into spectral lines.  As a result, it exposes periodic covariance even when the ordinary mean is zero~\cite[Sec. 8.1, p. 663, eqs. (8.1)--(8.3)]{gardner2006}.  Broader cyclic-statistics frameworks develop the corresponding estimation and testing methods, including higher-order extensions~\cite[Secs. 4.1, 11, and 13.2]{gardner2006}.
+The emphasis on second- and higher-order cyclostationarity does not make the first-order result new.  First-order processing identifies a periodic mean, or spectral line~\cite[eqs. (1)--(3)]{gardner1986}.  Second-order processing forms lag products and converts their periodic components into spectral lines.  As a result, it exposes periodic covariance even when the ordinary mean is zero~\cite[eqs. (8.1)--(8.3)]{gardner2006}.  Broader cyclic-statistics frameworks develop the corresponding estimation and testing methods, including higher-order extensions~\cite[Secs. 4.1, 11, and 13.2]{gardner2006}.
 
 The first-order case connects three descriptions of the same quantity.  Cyclostationary terminology emphasizes the Fourier coefficient of the time-varying mean.  Fourier terminology emphasizes the resulting spectral line.  Detection terminology emphasizes correlation with a known waveform.  Under the stated model, all three descriptions produce the same sufficient statistic.
 
