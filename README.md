@@ -1,8 +1,8 @@
 # Cyclic-Mean and Tone Matched-Filter Equivalence
 
 This repository contains the manuscript source and numerical verification for
-*From a Cyclic-Mean Estimate to a Tone Matched Filter: A Practical Equivalence
-and Its Limits*.
+*From the First-Order Cyclic Mean to a Tone Matched Filter: An Equivalence
+Chain and Its Conditions*.
 
 ## Reproduce the numerical results
 
