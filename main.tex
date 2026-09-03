@@ -326,17 +326,16 @@ At first order, the reduced-dimension cyclic moment is the cyclic mean.  For a r
 =\frac{X_N(\alpha)}{N}
 =\frac{\vect{s}_{\alpha}^{H}\vect{x}}{N}.
 \end{equation*}
-In words, estimating the first-order cyclic moment, evaluating the finite-record DTFT, and correlating with a complex tone produce the same complex quantity after the displayed normalizations.  This identity holds at every evaluated $\alpha$; only the replacement $X_N(\alpha)=X[k]$ requires $\alpha=k/N$.
+In words, estimating the first-order cyclic moment, evaluating the finite-record DTFT, and correlating with a complex tone produce the same complex quantity after the displayed normalizations.
 
-With known colored covariance, optimality instead requires the covariance-weighted statistic $T_C$ in~\eqref{eq:colored}, which whitens both the record and the template.  Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, however,
+With known colored covariance, optimality instead requires the covariance-weighted statistic $T_C$ in~\eqref{eq:colored}, which whitens both the record and the template.  Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, however, the normalized matched-filter energy $T_{\alpha}$ is exactly the squared magnitude of the finite-record estimate of the first-order cyclic moment divided by its noise-only variance:
 \begin{equation*}
 \boxed{
 T_{\alpha}
-=\frac{N|\widehat R_{x,1}^{\alpha}(0)|^2}{\sigma^2}
-=\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}.
+=\frac{N|\widehat R_{x,1}^{\alpha}(0)|^2}{\sigma^2}.
 }
 \end{equation*}
-The cyclic-moment form says that $T_{\alpha}$ is the noise-normalized energy of the finite-record first-order cyclic moment.  The matched-filter form says that the same $T_{\alpha}$ is the normalized energy at the tone matched-filter output.  Read in reverse, $|\widehat R_{x,1}^{\alpha}(0)|=(\sigma/\sqrt{N})\sqrt{T_{\alpha}}$: the statistic determines the magnitude of the complex cyclic-moment estimate, but not its phase.  Thus, under this model, the first-order cyclostationarity statistic and the tone matched-filter GLRT statistic are the same statistic.
+In words, the tone matched-filter GLRT statistic and the noise-normalized first-order cyclic-moment energy are the same quantity.  This equality holds at every evaluated $\alpha$; the condition $\alpha=k/N$ is needed only when the correlation is computed as an $N$-point DFT bin.  Read in reverse, $|\widehat R_{x,1}^{\alpha}(0)|=(\sigma/\sqrt{N})\sqrt{T_{\alpha}}$: $T_{\alpha}$ determines the magnitude of the complex cyclic-moment estimate, but not its phase.  Thus, under this model, the first-order cyclostationarity statistic is obtained by tone matched filtering followed by magnitude-squaring and noise normalization.
 
 % Add any acknowledgments and required conflict-of-interest statement before submission.
 \section*{Acknowledgements}
