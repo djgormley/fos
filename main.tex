@@ -322,16 +322,17 @@ At first order, the cyclic moment is the cyclic mean, and its $N$-sample estimat
 =\frac{X_N(\alpha)}{N}
 =\frac{\vect{s}_{\alpha}^{H}\vect{x}}{N}.
 \end{equation*}
-This equality holds at every evaluated $\alpha$; only replacing $X_N(\alpha)$ by the DFT coefficient $X[k]$ requires $\alpha=k/N$.  Colored noise uses the standard covariance-weighted, or whitened, statistic in~\eqref{eq:colored}; real tones, multiple harmonics, and random ensemble phase require the modifications described above.
+In words, the finite-record cyclic-mean estimate is exactly the normalized length-$N$ DTFT sample and the normalized complex-tone correlation.  For the white-noise tone model used here, the complex-tone correlation is the matched-filter output.  Only when $\alpha=k/N$ is the Fourier sample an $N$-point DFT coefficient.
 
-Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, the title becomes the final equality:
+With known colored covariance, optimality instead requires the covariance-weighted statistic $T_C$ in~\eqref{eq:colored}, which whitens both the record and the template and is generally not an unweighted cyclic-mean or DFT-bin energy.  Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model in~\eqref{eq:model}, the corresponding statistic is
 \begin{equation*}
 \boxed{
-\underbrace{\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}}_{\text{first-order cyclostationarity statistic}}
-=\underbrace{\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}}_{\text{tone matched-filter statistic}}
-=T_{\alpha}.
+T_{\alpha}
+=\frac{N|\widehat M_x^{\alpha}|^2}{\sigma^2}
+=\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}.
 }
 \end{equation*}
+In words, $T_{\alpha}$ is the squared magnitude of the cyclic-mean estimate divided by its noise-only variance.  Equivalently, it is the squared magnitude of the tone matched-filter output divided by its noise-only variance.  Thus, under this model, the first-order cyclostationarity statistic is the tone matched-filter statistic.
 
 \section*{Acknowledgements}
 
