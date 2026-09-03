@@ -1,3 +1,6 @@
+% Official IEEE Signal Processing Magazine Columns & Forum submission format.
+% Template package: IEEE-SPM-C&F-Templates_LaTeX.zip, retrieved from the
+% IEEE Template Selector on September 2, 2026.
 \documentclass[11pt,draftcls,onecolumn,journal]{IEEEtran}
 
 \usepackage{amsmath,amsfonts}
@@ -239,8 +242,7 @@ The first row is the central result.  Only the DFT-bin shortcut requires $\alpha
 
 \section*{Numerical Verification and Grid Mismatch}
 
-We first verify the common statistic using a length-$64$ complex tone in white noise.  The simulation computes $T_{\alpha}$ independently from its counter-rotate-and-average and matched-filter forms, with a maximum absolute difference below $5\times10^{-12}$.  Following this direct check, we perform $80{,}000$ Monte Carlo trials at $P_{\mathrm{FA}}=0.01$ using random seed 20260902.  As shown in Figure~\ref{fig:verification}(a), the detection probability follows the noncentral chi-square law derived above.  
-%The script and version-pinned direct-dependency list used to reproduce Figure~\ref{fig:verification} are available at \url{https://github.com/djgormley/fos}.
+We first verify the common statistic using a length-$64$ complex tone in white noise.  The simulation computes $T_{\alpha}$ independently from its counter-rotate-and-average and matched-filter forms, with a maximum absolute difference below $5\times10^{-12}$.  Following this direct check, we perform $80{,}000$ Monte Carlo trials at $P_{\mathrm{FA}}=0.01$ using random seed 20260902.  As shown in Figure~\ref{fig:verification}(a), the detection probability follows the noncentral chi-square law derived above.  The script and version-pinned direct-dependency list used to reproduce Figure~\ref{fig:verification} are available at \url{https://github.com/djgormley/fos}.
 
 Next, we evaluate $T_{\alpha}$ at a single DFT bin.  This bin is matched only to its center frequency.  For a rectangular length-$N$ record, a half-bin tone offset reduces the single-bin output by approximately $3.92$ dB, as shown in Figure~\ref{fig:verification}(b).  In comparison, the cyclic-mean estimate evaluated at the true $\alpha$ remains exactly tuned.  Therefore, when $\alpha$ is not on the DFT grid, a fast Fourier transform (FFT) implementation requires a denser grid, interpolation, or a frequency-refinement stage.
 
@@ -333,9 +335,10 @@ Under the known-frequency, unknown-complex-amplitude white-Gaussian tone model i
 }
 \end{equation*}
 
+% Add any acknowledgments and required conflict-of-interest statement before submission.
 \section*{Acknowledgements}
 
-The authors declare no known conflicts-of-interest.
+The authors dela
 
 \begin{thebibliography}{5}
 \bibliographystyle{IEEEtran}
