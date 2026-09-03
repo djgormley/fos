@@ -33,9 +33,9 @@
 \newcommand{\CN}{\mathcal{CN}}
 \newcommand{\vect}[1]{\bm{#1}}
 
-\title{A First-Order Cyclostationarity Statistic\\
+\title{Tip-- A First-Order Cyclostationarity Statistic\\
 Reduces to Tone Matched Filtering\\
-{\large An Equivalence Chain and Its Conditions}}
+{\large The Equivalence Chain and Its Conditions}}
 
 \author{Dylan~J.~Gormley and Kevin~M.~Bandura%
 \thanks{This work was supported by National Science Foundation under grant number 2307581.
@@ -53,7 +53,7 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 \label{sec:introduction}
 \IEEEPARstart{T}{he} first-order cyclostationarity statistic considered here is formed from the cyclic mean, the order-one cyclic moment.  At a candidate cycle frequency, its finite-record estimate counter-rotates the record and averages.  For a rectangular $N$-sample record, this estimate is a normalized discrete-time Fourier transform (DTFT) evaluation and a normalized complex-tone matched-filter output.  On the discrete Fourier transform (DFT) grid, that Fourier sample is exactly a normalized DFT coefficient.  Under a known-frequency tone model in proper complex white Gaussian noise of known variance, the normalized squared magnitude of the same output is the unknown-complex-amplitude tone generalized likelihood-ratio test (GLRT).  Thus, computing the statistic reduces to tone matched filtering followed by normalization and thresholding.  We develop the exact identity, isolate the FFT-grid trap, and then separate standard detector extensions from the ensemble-interpretation caveat.
 
-\section*{The Trick: Counter-Rotate and Average}
+\section*{The Trick: Phase Correction}
 
 At first order, the cyclic moment is the cyclic mean.  Its finite-record estimate is obtained by counter-rotating at the candidate cycle frequency and averaging---the same operation that evaluates a finite-record DTFT sample and correlates the record with a complex tone.  Consider the complex record $x[0],\ldots,x[N-1]$, and let $\alpha$ denote the candidate frequency in cycles per sample.  An ordinary finite-record sample mean extracts zero frequency, so a component at nonzero $\alpha$ is generally attenuated by phase cancellation.  Define the phase-corrected samples as $z_{\alpha}[n]\equiv x[n]e^{-j2\pi\alpha n}$.  A matching component then moves to zero frequency, and the finite-record cyclic-mean estimate is the ordinary sample mean of the corrected sequence:
 \begin{equation}
