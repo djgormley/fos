@@ -1,8 +1,8 @@
-"""Reproduce the numerical figure for the accompanying manuscript.
+"""Generate the numerical verification results for the accompanying manuscript.
 
-The script verifies the finite-record identity directly, estimates the
-detection probability of the common statistic, and plots the loss caused by
-using the nearest DFT bin for an off-grid tone.
+We first verify the finite-record detector identity. Next, we estimate the
+detection probability of the common statistic. Lastly, we evaluate the loss
+caused by evaluating an off-grid tone with a single DFT bin.
 """
 
 from pathlib import Path
@@ -26,7 +26,7 @@ def main() -> None:
     sigma2 = 1.0
     threshold = -np.log(P_FA)
 
-    # Direct finite-record verification on independently generated records.
+    # First, verify the finite-record identity using independent records.
     check_trials = 4_000
     a_check = 10 ** (-14 / 20)
     w = np.sqrt(sigma2 / 2) * (
@@ -41,8 +41,8 @@ def main() -> None:
     if max_identity_error > 5e-12:
         raise RuntimeError(f"Identity check failed: {max_identity_error:g}")
 
-    # Monte Carlo detection probabilities can be generated directly at the
-    # normalized matched-filter output because that output is sufficient.
+    # Next, generate the Monte Carlo detection probabilities directly from the
+    # normalized matched-filter output, which is a sufficient statistic.
     snr_db = np.arange(-25, -4, 2)
     snr = 10 ** (snr_db / 10)
     pd_mc = []
@@ -55,7 +55,7 @@ def main() -> None:
     pd_mc = np.asarray(pd_mc)
     pd_theory = ncx2.sf(2 * threshold, df=2, nc=2 * N * snr)
 
-    # Nearest-bin response as a function of frequency offset in DFT bins.
+    # Lastly, evaluate the tested-bin response as the frequency offset changes.
     offset_bins = np.linspace(-1.5, 1.5, 1601)
     delta = offset_bins / N
     numerator = np.sin(np.pi * N * delta)
@@ -90,11 +90,11 @@ def main() -> None:
         markerfacecolor="white",
         markeredgewidth=1.2,
         color="#b4462a",
-        label="Cyclic = matched-filter Monte Carlo",
+        label="Common-statistic Monte Carlo",
     )
     ax.set_xlabel("Per-sample SNR (dB)")
     ax.set_ylabel("Detection probability")
-    ax.set_title(f"(a) Exact decision-statistic identity ($N={N}$)")
+    ax.set_title(f"(a) Detector-equivalence verification ($N={N}$)")
     ax.set_ylim(-0.02, 1.02)
     ax.set_xlim(snr_db[0], snr_db[-1])
     ax.grid(True, alpha=0.28)
@@ -115,14 +115,14 @@ def main() -> None:
     ax.axhline(half_bin_loss, color="#b4462a", linestyle=":", linewidth=1.2)
     ax.scatter([0.5], [half_bin_loss], color="#b4462a", s=18, zorder=3)
     ax.annotate(
-        f"half-bin loss = {half_bin_loss:.2f} dB",
+        f"Half-bin loss = {half_bin_loss:.2f} dB",
         xy=(0.5, half_bin_loss),
         xytext=(0.62, -1.1),
         arrowprops={"arrowstyle": "->", "color": "#555555", "lw": 0.8},
     )
     ax.set_xlabel("Tone offset from tested bin (DFT bins)")
     ax.set_ylabel("Normalized output (dB)")
-    ax.set_title("(b) A DFT bin is only one matched filter")
+    ax.set_title("(b) Single-bin mismatch loss")
     ax.set_ylim(-30, 1)
     ax.set_xlim(-1.5, 1.5)
     ax.grid(True, alpha=0.28)
