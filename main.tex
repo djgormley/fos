@@ -9,7 +9,7 @@
 \usepackage[hidelinks]{hyperref}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \hypersetup{
-  pdftitle={First-Order Cyclic Moments as Tone Matched-Filter Outputs: Keeping Phase, Conjugation, and Normalization Straight},
+  pdftitle={First-Order Cyclic Moments as Tone Matched-Filter Outputs: The Finite-Record Identity Made Explicit},
   pdfauthor={Dylan J. Gormley and Kevin M. Bandura},
   pdfsubject={First-order cyclostationarity, cyclic moments, and tone matched filtering}
 }
@@ -22,7 +22,7 @@
 \newcommand{\jj}{\mathrm{j}}
 
 \title{First-Order Cyclic Moments as Tone Matched-Filter Outputs\\
-{\large Keeping Phase, Conjugation, and Normalization Straight}}
+{\large The Finite-Record Identity Made Explicit}}
 
 \author{Dylan~J.~Gormley and Kevin~M.~Bandura%
 \thanks{This work was supported by the National Science Foundation under grant number 2307581.
@@ -36,11 +36,11 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 
 \begin{document}
 \maketitle
-\noindent Cyclostationarity is usually introduced through second- and higher-order statistics, so its first-order case is easy to overlook.  Yet setting $p=1$ in the general cyclic-moment estimator leaves one signal factor multiplied by a phase correction.  The two optional-star configurations are the cyclic means of $x$ and $x^*$, denoted $\widehat M_x^{\alpha}$ and $\widehat M_{x^*}^{\alpha}$.  They are conjugate reflections and map symmetrically to a normalized tone matched-filter output.  These identities need no noise model or frequency grid.
+\noindent Cyclostationary theory is best known for its second- and higher-order statistics.  Its moment hierarchy, however, begins at order $p=1$.  Stop the hierarchy there and the general cyclic estimator becomes a phase-corrected average.  For a finite record, the star-absent estimate is exactly a normalized tone matched-filter output; the star-present estimate gives the same output after conjugation and frequency reflection.  These identities are deterministic, hold at every evaluated frequency, and give first-order cyclostationarity an immediate interpretation in familiar signal-processing terms.
 
-Classical theory identifies the cyclic mean with the coefficient of a finite-strength additive sine wave and derives it through an individual harmonic-selecting filter~\cite[eqs. (17)--(21)]{gardner1986}.  Harmonic-estimation work likewise identifies the data DFT as the cyclic mean and relates DFT peak picking to fitting a constant-amplitude harmonic~\cite[Sec. 1]{ghogho1999}.  The pedagogical point here is to make the exact finite-record tone matched-filter identity explicit, including its normalization and the conjugate-reflected optional-star branch.
+The individual links are classical.  Gardner identifies the cyclic mean with the coefficient of a finite-strength additive sine wave and derives it through an individual harmonic-selecting filter~\cite[eqs. (17)--(21)]{gardner1986}.  Harmonic-estimation work identifies the data DFT as the cyclic mean and relates DFT peak picking to fitting a constant-amplitude harmonic~\cite[Sec. 1]{ghogho1999}.  Taken together, these treatments supply the ingredients of the finite-record relation.  Here we write that relation directly from the general optional-star cyclic moment, including its normalization and conjugate-reflected branch.  That small synthesis is the point: a familiar tone projection is already present at the first order of the general cyclostationary framework.
 
-\section*{Endpoint 1: The Cyclic Estimate}
+\section*{Start with the General Cyclic Moment}
 
 Consider a complex record $x[0],\ldots,x[N-1]$, with cycle frequency $\alpha$ measured in cycles per sample and integer sample delays $\vect{\tau}=(\tau_1,\ldots,\tau_p)$.  Following Gardner et al., let $x^{(*)_\ell}$ mean that the $\ell$th factor is either $x$ or $x^*$, and let $\mathcal{C}=((*)_1,\ldots,(*)_p)$ denote the selected conjugation configuration.  Replacing the time average in Gardner's reduced-dimension order-$p$ cyclic moment~\cite[eqs. (13.21) and (13.25)]{gardner2006} with an equally weighted average over the available finite record gives
 \begin{equation}
@@ -55,15 +55,12 @@ Consider a complex record $x[0],\ldots,x[N-1]$, with cycle frequency $\alpha$ me
 \end{equation}
 where $\mathcal I_{\vect{\tau}}$ contains the indices for which every shifted sample is available and $N_{\vect{\tau}}=|\mathcal I_{\vect{\tau}}|$.  The exponential is the phase-correction, or counter-rotation, factor: it removes the cycle phase at $\alpha$ before the product is averaged.
 
-Equation~\eqref{eq:general} uses a fixed reference: $\tau_p=0$ places the final factor at $n$, and the other delays are measured relative to it.  The optional star changes a sample's complex value, not its time argument.
+Gardner's reduced-dimension convention fixes the final factor at zero delay, so the other delays are measured relative to it.  The optional star replaces a selected factor by its complex conjugate without changing its time argument.
 
-At second order, the product is $x[n+\tau]x^{(*)}[n]$~\cite[eq. (3.67)]{gardner2006}; selecting the star does not send $\tau$ to $-\tau$.  A second-order lag changes sign only when the two time arguments are exchanged.  Because correlation labels and subscript conventions vary~\cite[p. 650]{gardner2006}, below we name the first-order branches by the factor that remains.
+\section*{Stop at First Order}
 
-\section*{Set $p=1$: The Two Cyclic Means}
+At $p=1$, the product in~\eqref{eq:general} contains only the fixed-reference factor.  There is no relative delay to estimate; the $(0)$ simply records the reference already fixed in~\eqref{eq:general}.  The estimator therefore reduces immediately to two finite-record cyclic means:
 
-At $p=1$, the product in~\eqref{eq:general} contains one factor, so no relative lag remains; $(0)$ records the fixed reference.  In the underlying time average, moving that reference to $\tau$ multiplies the coefficient by $\ee^{\jj2\pi\alpha\tau}$ for either factor choice.  Zero therefore fixes the time-origin phase before the finite record is taken.
-
-We show the selected factor directly in the subscript and define the two first-order cyclic means in parallel:
 \begin{equation}
 \begin{aligned}
 \widehat M_x^{\alpha}
@@ -77,9 +74,9 @@ x^*[n]\ee^{-\jj2\pi\alpha n}.
 \end{aligned}
 \label{eq:twocyclicmeans}
 \end{equation}
-The first line is the equally weighted finite-record counterpart of Gardner's cyclic mean~\cite[eq. (2)]{gardner1986}; the second applies the same definition to $x^*$.  Thus the star in $\widehat M_{x^*}^{\alpha}$ belongs to the input sequence, not to the completed coefficient.
+The first line is the equally weighted finite-record counterpart of Gardner's cyclic mean~\cite[eq. (2)]{gardner1986}; the second applies the same definition to $x^*$.  The star in $\widehat M_{x^*}^{\alpha}$ therefore belongs to the input sequence, not to the completed coefficient.
 
-Before introducing a matched filter, compare the two cyclic means directly.  Conjugating the completed $x^*$ coefficient gives
+Across reflected cycle frequencies, the two branches contain the same information.  Conjugating the completed $x^*$ coefficient gives
 \begin{equation}
 \begin{aligned}
 \left[\widehat M_{x^*}^{\alpha}\right]^*
@@ -95,11 +92,11 @@ x[n]\ee^{-\jj2\pi(-\alpha)n}
 \end{aligned}
 \label{eq:firstorderreflection}
 \end{equation}
-Equation~\eqref{eq:firstorderreflection} shows that, once the completed $x^*$ coefficient is conjugated, the only remaining difference is the negative sign on the cycle frequency.  It is a frequency reflection, not a lag reversal; no relative lag remains at first order.
+Thus the completed coefficients are conjugate reflections in cycle frequency.
 
-\section*{Endpoint 2: The Tone Matched Filter}
+\section*{Recognize the Tone Matched Filter}
 
-For a unit-amplitude tone at frequency $f$ cycles per sample, define
+Now compare~\eqref{eq:twocyclicmeans} with the familiar projection onto a tone.  For a unit-amplitude tone at frequency $f$ cycles per sample, define
 \begin{equation}
 s_f[n]=\ee^{\jj2\pi fn},\qquad 0\leq n<N.
 \label{eq:tone}
@@ -119,11 +116,11 @@ y_{\mathrm{MF}}(f)
 \end{aligned}
 \label{eq:matchedfilter}
 \end{equation}
-The equality derived below is deterministic; the usual claim that this particular template correlator is SNR-optimal assumes white noise or prior whitening.  Because $\sum_{n=0}^{N-1}|s_f[n]|^2=N$, dividing $y_{\mathrm{MF}}(f)$ by $N$ gives the unit-gain projection coefficient.  Nothing in this inner product requires $f$ to be an FFT-bin frequency; an FFT merely evaluates it on its own frequency grid.
+Because $\sum_{n=0}^{N-1}|s_f[n]|^2=N$, dividing $y_{\mathrm{MF}}(f)$ by $N$ gives the unit-gain projection coefficient.  The algebraic identity below is deterministic.  Interpreting this correlator as SNR-optimal assumes white noise or prior whitening, but the identity itself needs neither a noise model nor an FFT-bin grid; an FFT merely evaluates the projection on its own frequency grid.
 
-\section*{Put the Endpoints Together}
+\section*{State the Identity}
 
-Comparing the first line of~\eqref{eq:twocyclicmeans} with the final sum in~\eqref{eq:matchedfilter} gives
+The decisive observation is that the first line of~\eqref{eq:twocyclicmeans} and the final line of~\eqref{eq:matchedfilter} contain the same finite-record inner product.  Therefore,
 \begin{equation}
 \widehat M_x^f
 =\widehat R_{x,1}^f(0)
@@ -147,19 +144,19 @@ y_{\mathrm{MF}}(f)
 \begin{center}
 \fcolorbox{deepblue}{warmgray}{%
 \begin{minipage}{0.88\textwidth}
-\textbf{The tip.} The two first-order cyclic means satisfy $[\widehat M_{x^*}^{\alpha}]^*=\widehat M_x^{-\alpha}$.  A tone matched filter at $f$ produces $y_{\mathrm{MF}}(f)=N\widehat M_x^f$, and therefore also $y_{\mathrm{MF}}(f)=N[\widehat M_{x^*}^{-f}]^*$.  The $x$ path uses $f$ directly; the $x^*$ path uses $-f$ and conjugates the completed coefficient.
+\textbf{The tip.} The first-order cyclic-mean estimate $\widehat M_x^f$ is exactly a normalized tone matched-filter output.  Specifically, $y_{\mathrm{MF}}(f)=N\widehat M_x^f=N[\widehat M_{x^*}^{-f}]^*$, while the two cyclic means satisfy $[\widehat M_{x^*}^{\alpha}]^*=\widehat M_x^{-\alpha}$.  The $x$ path uses $f$ directly; the $x^*$ path uses $-f$ and conjugates the completed coefficient.
 \end{minipage}}
 \end{center}
 
 For example, if $x[n]=a\ee^{\jj2\pi\alpha n}$, then $\widehat M_x^{\alpha}=a$ and $\widehat M_{x^*}^{-\alpha}=a^*$.  Equation~\eqref{eq:matchedidentities} therefore gives $y_{\mathrm{MF}}(\alpha)=Na$ through the $x$ path directly or through the $x^*$ path after completed conjugation.
 
-\section*{Why Point It Out?}
+\section*{Why the Identity Is Worth Stating}
 
-The identities provide a simple implementation check: disagreement between either cyclic-mean branch and its corresponding equality in~\eqref{eq:matchedidentities} exposes a sign, conjugation, or normalization error.  They also place often-overlooked first-order cyclic quantities in familiar signal-processing language.  A carrier, pilot, or residual line can be handled through either cyclic mean or the corresponding tone correlator because, at first order, they are the same finite-record projection under the stated sign and conjugation convention.
+The value of~\eqref{eq:matchedidentities} is conceptual before it is computational.  Cyclostationary analysis calls the unit-gain projection coefficient a cyclic mean; matched-filter language calls the corresponding unnormalized inner product a tone matched-filter output.  A carrier, pilot, or residual line can therefore be interpreted in either vocabulary.  The factor $N$ separates the normalizations, not the underlying computation.  The identity does not create a new estimator---that is precisely the point.  It identifies the familiar estimator already hiding at first order in the general cyclic-moment hierarchy.  As a secondary benefit, disagreement between the two sides of~\eqref{eq:matchedidentities} exposes a sign, conjugation, or normalization error.
 
 \section*{Conclusion}
 
-At $p=1$, the two optional-star configurations reduce to the conjugate-reflected cyclic means $\widehat M_x^{\alpha}$ and $\widehat M_{x^*}^{\alpha}$.  Their common matched-filter form is $y_{\mathrm{MF}}(f)=N\widehat M_x^f=N[\widehat M_{x^*}^{-f}]^*$.  The identity is exact for every finite record and every evaluated $f$.
+Following the general cyclic-moment hierarchy down to $p=1$ reveals a familiar object: the normalized tone matched-filter output.  The two optional-star branches are conjugate reflections, and their common form is $y_{\mathrm{MF}}(f)=N\widehat M_x^f=N[\widehat M_{x^*}^{-f}]^*$.  The ingredients are classical, but writing the complete finite-record relation directly makes the bridge explicit.  It is exact for every finite record and every evaluated $f$.
 
 \section*{Declaration of Interests}
 

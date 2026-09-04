@@ -1,8 +1,8 @@
 # First-Order Cyclic Moments and Tone Matched Filtering
 
 This repository contains the manuscript source and numerical verification for
-*First-Order Cyclic Moments as Tone Matched-Filter Outputs: Keeping Phase,
-Conjugation, and Normalization Straight*.
+*First-Order Cyclic Moments as Tone Matched-Filter Outputs: The Finite-Record
+Identity Made Explicit*.
 
 ## Verify the identities
 
