@@ -52,7 +52,58 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 \label{sec:introduction}
 \IEEEPARstart{C}{yclostationarity} is usually introduced through second- and higher-order statistics, so first order is easy to overlook.  At first order, the cyclic moment is the cyclic mean: counter-rotate the record and average.  The same calculation gives a discrete-time Fourier transform (DTFT) sample and a complex-tone correlation, each divided by $N$; on the discrete Fourier transform (DFT) grid, it is $X[k]/N$.  Under the white-Gaussian tone model stated below, its noise-normalized energy is also a generalized likelihood-ratio test (GLRT) statistic for an unknown complex amplitude.
 
-This is not a new detector.  The useful point is that a first-order cyclic feature can be implemented and analyzed with familiar tone-detection tools.  Three conditions should be kept separate: the FFT grid affects implementation, the signal and noise model determine optimality, and an ensemble cyclic-mean interpretation requires a stable phase reference and suitable averaging assumptions.  This article derives the connection and turns these distinctions into a practical guide.
+This is not a new detector.  The useful point is that a first-order cyclic feature can be implemented and analyzed with familiar tone-detection tools.  Three conditions should be kept separate: the FFT grid affects implementation, the signal and noise model determine optimality, and an ensemble cyclic-mean interpretation requires a stable phase reference and suitable averaging assumptions.  We begin with the first-order reduction, then follow its finite-record estimate through its Fourier, matched-filter, and GLRT interpretations.
+
+\section*{Why First Order Is the Cyclic Mean}
+
+A $p$th-order cyclic moment averages a product of $p$ possibly conjugated and shifted signal factors after counter-rotation.  At $p=1$, only one factor remains and there are no relative lags.  The reduction is easiest to see from the single-signal form of the continuous-time definition~\cite[eq. (13.1)]{gardner2006}:
+\begin{equation}
+R_{x,p}^{\alpha}(\vect{\tau})
+=
+\left\langle
+\prod_{\ell=1}^{p}
+x^{(*)_{\ell}}(t+\tau_{\ell})
+e^{-j2\pi\alpha t}
+\right\rangle_t ,
+\label{eq:general}
+\end{equation}
+Here, $(*)_{\ell}$ denotes optional conjugation and $\langle\cdot\rangle_t$ denotes a time average.  The full form uses $p$ delays, whereas the reduced form uses $p-1$ relative lags.  Setting $p=1$ leaves one common reference delay.  Keeping the optional-conjugation placeholder $(*)$ visible, shift invariance of the infinite-time average gives
+\begin{equation}
+R_{x,1}^{\alpha,(*)}(\tau)
+=\left\langle x^{(*)}(t+\tau)e^{-j2\pi\alpha t}\right\rangle_t
+=e^{j2\pi\alpha\tau}R_{x,1}^{\alpha,(*)}(0).
+\label{eq:firstorderlag}
+\end{equation}
+The delay $\tau$ shifts the only factor rather than measuring separation between factors.  Equation~\eqref{eq:firstorderlag} shows that it changes only a known phase.  The reduced-dimension convention therefore sets $\tau=0$ without losing information~\cite[eq. (13.7)]{gardner2006}:
+\begin{equation}
+R_{x,1}^{\alpha,(*)}(0)
+=\left\langle x^{(*)}(t)e^{-j2\pi\alpha t}\right\rangle_t .
+\label{eq:firstorderzero}
+\end{equation}
+With no relative lag, there is also no lag variable to Fourier transform.
+
+Now evaluate the two choices in~\eqref{eq:firstorderzero}:
+\begin{equation}
+\begin{aligned}
+(*)\ \text{omitted:}\quad
+\left\langle x(t)e^{-j2\pi\alpha t}\right\rangle_t
+&=R_{x,1}^{\alpha}(0),\\
+(*)\ \text{applied:}\quad
+\left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t
+&=\left[\left\langle x(t)e^{+j2\pi\alpha t}\right\rangle_t\right]^*\\
+&=\left[R_{x,1}^{-\alpha}(0)\right]^*.
+\end{aligned}
+\label{eq:conjugation}
+\end{equation}
+Thus, once the standard unconjugated coefficients are known at both signs of $\alpha$, the conjugated case comes for free.  For real-valued $x$, the two choices are identical at the same cycle frequency.  We use the unconjugated form from here on and write
+\begin{equation}
+M_x^{\alpha}
+\equiv R_{x,1}^{\alpha}(0)
+=\left\langle x(t)e^{-j2\pi\alpha t}\right\rangle_t .
+\label{eq:cyclicmeanct}
+\end{equation}
+
+For a sampled finite record, estimate this coefficient with an $N$-sample average.  Interpreting that average as a consistent ensemble estimate additionally requires a common phase reference and an appropriate first-order cycloergodicity or consistency condition.
 
 \section*{The Core Operation: Counter-Rotate, Then Average}
 
@@ -68,7 +119,7 @@ The cyclic-mean estimate is then the ordinary mean of the corrected samples:
 =\frac{1}{N}\sum_{n=0}^{N-1}x[n]e^{-j2\pi\alpha n}.
 \label{eq:cyclicmean}
 \end{equation}
-Here, $M_x^{\alpha}$ is the limiting time-average coefficient, while $\widehat M_x^{\alpha}$ is its finite-record estimate.  Under a suitable consistency condition, the time-average coefficient also equals the corresponding ensemble coefficient.  The decision statistic $T_{\alpha}$ is defined below.  For $x[n]=ae^{j2\pi\alpha n}$, every corrected sample equals $a$, so $\widehat M_x^{\alpha}=a$.  At a mismatched frequency, the corrected samples still rotate and partially cancel.  This estimator is also used directly in cyclostationary signal detection and classification~\cite[eq. (9)]{dobre2009}.
+Here, $\widehat M_x^{\alpha}$ is the finite-record estimate, and the decision statistic $T_{\alpha}$ is defined below.  For $x[n]=ae^{j2\pi\alpha n}$, every corrected sample equals $a$, so $\widehat M_x^{\alpha}=a$.  At a mismatched frequency, the corrected samples still rotate and partially cancel.  This estimator is also used directly in cyclostationary signal detection and classification~\cite[eq. (9)]{dobre2009}.
 
 \textbf{Fourier and correlator views.}
 Writing the phase-correction weights as vectors makes the connection explicit.  Collect the record and candidate phase progression in
@@ -95,7 +146,7 @@ On the DFT grid, $\alpha\equiv k/N\pmod 1$, so $X_N(\alpha)=X[k]$ and $\widehat 
 \begin{equation}
 X[k]=\sum_{n=0}^{N-1}x[n]e^{-j2\pi kn/N}.
 \end{equation}
-Off grid, the sum in~\eqref{eq:cyclicmean} is still exact; it is a DTFT sample rather than an $N$-point DFT bin.  Zero padding supplies exact DTFT samples on a denser grid, while interpolation or refinement estimates an arbitrary off-grid location.  This is the usual FFT-grid issue, not a limitation of the first-order identity.  Gardner's time-average Fourier coefficients give the corresponding infinite-record view~\cite[eqs. (1)--(3)]{gardner1986}.
+Off grid, $X_N(\alpha)$ is still an exact DTFT sample rather than an $N$-point DFT bin.  Zero padding supplies exact DTFT samples on a denser grid, while interpolation or refinement estimates an arbitrary off-grid location.  This is the usual FFT-grid issue, not a limitation of the first-order identity.  Gardner's time-average Fourier coefficients give the corresponding infinite-record view~\cite[eqs. (1)--(3)]{gardner1986}.
 
 \begin{center}
 \fcolorbox{deepblue}{warmgray}{%
@@ -104,50 +155,9 @@ Off grid, the sum in~\eqref{eq:cyclicmean} is still exact; it is a DTFT sample r
 \end{minipage}}
 \end{center}
 
-\section*{Why First Order Is the Cyclic Mean}
-
-Start with the continuous-time $p$th-order cyclic temporal cross-moment~\cite[eq. (13.1)]{gardner2006}:
-\begin{equation}
-R_{x,p}^{\alpha}(\vect{\tau})
-=
-\left\langle
-\prod_{\ell=1}^{p}
-x_{\ell}^{(*)_{\ell}}(t+\tau_{\ell})
-e^{-j2\pi\alpha t}
-\right\rangle_t ,
-\label{eq:general}
-\end{equation}
-Here, $p$ is the moment order, $(*)_{\ell}$ denotes optional conjugation, and $\langle\cdot\rangle_t$ denotes a time average.  The full form uses $p$ delays; its reduced form uses $p-1$ relative lags.  At $p=1$, the product has one factor and no relative lag, so the first-order cyclic moment is simply the cyclic mean.  With no relative lag, there is no lag variable to Fourier transform.
-
-At first order, conjugation adds no new information when both signs of cycle frequency are included:
-\begin{equation*}
-\left\langle x^*(t+\tau)e^{-j2\pi\alpha t}\right\rangle_t
-=
-\left[
-\left\langle x(t+\tau)e^{+j2\pi\alpha t}\right\rangle_t
-\right]^* .
-\end{equation*}
-Thus, the conjugated coefficient at $\alpha$ is the complex conjugate of the unconjugated coefficient at $-\alpha$.  For real-valued $x$, the two forms are identical at the same cycle frequency.
-
-First order also has no independent lag.  The delay $\tau$ shifts the only signal factor rather than measuring separation between factors.  Shift invariance of the infinite-time average gives
-\begin{equation*}
-R_{x,1}^{\alpha}(\tau)
-=\left\langle x(t+\tau)e^{-j2\pi\alpha t}\right\rangle_t
-=R_{x,1}^{\alpha}(0)e^{j2\pi\alpha\tau}.
-\end{equation*}
-Thus, $\tau$ changes only a known phase.  The reduced-dimension convention sets $\tau=0$ without losing information~\cite[eq. (13.7)]{gardner2006}, giving
-\begin{equation}
-M_x^{\alpha}
-\equiv R_{x,1}^{\alpha}(0)
-=\left\langle x(t)e^{-j2\pi\alpha t}\right\rangle_t .
-\label{eq:cyclicmeanct}
-\end{equation}
-
-Equation~\eqref{eq:cyclicmean} is the rectangular, $N$-sample estimate of this coefficient.  It estimates the ensemble coefficient consistently only when the records share a phase reference and the appropriate first-order cycloergodicity or consistency condition holds.
-
 \section*{When the Common Output Is a GLRT}
 
-The identities above are algebraic and require no noise model.  The GLRT interpretation requires the following signal and noise model~\cite[Sec. 13.4.1]{kay1998}:
+None of the identities above requires a noise model.  The GLRT interpretation requires the following signal and noise model~\cite[Sec. 13.4.1]{kay1998}:
 \begin{align}
 \mathcal H_0 &: \vect{x}=\vect{w},\nonumber\\
 \mathcal H_1 &: \vect{x}=a\vect{s}_{\alpha}+\vect{w},
