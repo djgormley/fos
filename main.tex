@@ -67,7 +67,7 @@ e^{-j2\pi\alpha t}
 \right\rangle_t ,
 \label{eq:general}
 \end{equation}
-Here, $(*)_{\ell}$ denotes optional conjugation of the signal factor $x$, and $\langle\cdot\rangle_t$ denotes a time average.  The full form uses $p$ delays, whereas the reduced form uses $p-1$ relative lags.  Setting $p=1$ leaves one common reference delay.  Under the usual complex-correlation convention, the conventional branch retains the reference conjugation $x^*$; the conjugate configuration applies a second conjugation, so $[x^*]^*=x$.  This is the same conjugation bookkeeping used for complex correlations at every order.  Shift invariance of the infinite-time average gives
+Here, $(*)_{\ell}$ denotes optional conjugation and $\langle\cdot\rangle_t$ denotes a time average.  The full form uses $p$ delays, whereas the reduced form uses $p-1$ relative lags.  Setting $p=1$ leaves one common reference delay.  Shift invariance of the infinite-time average gives
 \begin{equation}
 R_{x,1}^{\alpha,(*)}(\tau)
 =\left\langle [x^*(t+\tau)]^{(*)}e^{-j2\pi\alpha t}\right\rangle_t
@@ -96,7 +96,7 @@ R_{x,1}^{\alpha,*}(0)
 \end{aligned}
 \label{eq:conjugation}
 \end{equation}
-The star following $\alpha$ labels the conjugate configuration; it does not conjugate the entire coefficient.  Thus, the two first-order configurations are conjugate reflections, and $|R_{x,1}^{\alpha,*}(0)|=|R_{x,1}^{-\alpha}(0)|$.  A two-sided evaluation of the conventional branch therefore supplies the other configuration for free.  For real-valued $x$, the two configurations coincide at the same cycle frequency.  For the matched-filter connection, we use the configuration containing $x$ and write
+Thus, the two first-order choices are conjugate reflections, and $|R_{x,1}^{\alpha,*}(0)|=|R_{x,1}^{-\alpha}(0)|$.  A two-sided evaluation of one therefore supplies the other for free.  For real-valued $x$, the two choices coincide at the same cycle frequency.  Using the form containing $x$, the cyclic mean is
 \begin{equation}
 M_x^{\alpha}
 \equiv R_{x,1}^{\alpha,*}(0)
@@ -285,7 +285,7 @@ For a carrier, pilot, residual line, or other first-order component, the identit
 
 \section*{Conclusion}
 
-At first order, the two conjugation configurations differ only by conjugate reflection.  The configuration containing $x$ is the cyclic mean.  For a rectangular $N$-sample record, its finite-record estimate is
+At first order, the reduced-dimension cyclic moment is the cyclic mean; the other conjugation choice follows by reflection.  For a rectangular $N$-sample record, its finite-record estimate is
 \begin{equation*}
 \widehat R_{x,1}^{\alpha,*}(0)
 \equiv\widehat M_x^{\alpha}
@@ -304,7 +304,7 @@ T_{\alpha}
 }
 \end{equation*}
 \end{samepage}
-Thus, the tone matched-filter GLRT statistic is the first-order cyclic-mean energy measured in noise units, or equivalently the reflected conventional-moment energy.  This equality holds at every evaluated $\alpha$; only the $N$-point DFT-bin shortcut requires $\alpha\equiv k/N\pmod 1$.  Equivalently, $|\widehat R_{x,1}^{\alpha,*}(0)|=|\widehat R_{x,1}^{-\alpha}(0)|=(\sigma/\sqrt{N})\sqrt{T_{\alpha}}$, so $T_{\alpha}$ determines the estimate's magnitude but not its phase.
+Thus, the tone matched-filter GLRT statistic is the first-order cyclic-mean energy measured in noise units.  The equality to the coefficient at $-\alpha$ is simply the first-order reflection symmetry.  This result holds at every evaluated $\alpha$; only the $N$-point DFT-bin shortcut requires $\alpha\equiv k/N\pmod 1$.  Equivalently, $|\widehat R_{x,1}^{\alpha,*}(0)|=|\widehat R_{x,1}^{-\alpha}(0)|=(\sigma/\sqrt{N})\sqrt{T_{\alpha}}$, so $T_{\alpha}$ determines the estimate's magnitude but not its phase.
 
 The practical lesson is simple: under the stated model, first-order cyclic detection is ordinary tone detection written in cyclic-statistics notation.
 
