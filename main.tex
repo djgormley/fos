@@ -1,6 +1,7 @@
 \documentclass[11pt,draftcls,onecolumn,journal]{IEEEtran}
 
 \usepackage{amsmath,amsfonts}
+\usepackage{graphicx}
 \usepackage{url}
 \usepackage{cite}
 \usepackage{xcolor}
@@ -204,13 +205,23 @@ M_x^{\beta}
 \end{equation}
 With absent coefficients treated as zero and discrete-time cycle frequencies taken modulo one, the $x[n+\tau]x^*[n]$ branch inherits candidate differences of first-order frequencies; the $x[n+\tau]x[n]$ branch inherits candidate sums.  Coincident frequencies and cancellation can suppress individual terms.
 
-For example, if
+For an exact finite-record illustration, let $P=16$, $N=64$, and
 \begin{equation}
-m[n]=a_1\ee^{\jj2\pi\beta_1n}
-+a_2\ee^{\jj2\pi\beta_2n},
-\label{eq:twotonemean}
+x[n]=\ee^{\jj2\pi n/16}
++\frac{1}{2}\ee^{\jj2\pi5n/16},
+\qquad 0\leq n<64.
+\label{eq:twotoneexample}
 \end{equation}
-then the mean product $m[n+\tau]m^*[n]$ has cycles at $0$ and $\pm(\beta_1-\beta_2)$, whereas $m[n+\tau]m[n]$ has cycles at $2\beta_1$, $\beta_1+\beta_2$, and $2\beta_2$, modulo one.  These terms are genuine components of the raw cyclic moment, but they do not represent independent periodicity of the centered fluctuations.  Estimating and subtracting the periodic mean before recomputing the second-order statistic helps distinguish what is inherited from first order from what remains in the residual.  With a finite record, period mismatch, leakage, and mean-estimation error can leave residual mean terms.
+The record contains four complete periods.  Its first-order bank is nonzero only at bins $k=1$ and $k=5$, with coefficients $1$ and $1/2$.  Thus the corresponding matched-filter outputs are $64$ and $32$, and the phase average reconstructs $x[n]$ exactly.
+
+\begin{figure}[!b]
+\centering
+\includegraphics[width=0.94\linewidth]{figures/two_tone_support.pdf}
+\caption{Exact support propagation for~\eqref{eq:twotoneexample}.  The first-order coefficient magnitudes (top) equal the matched-filter output magnitudes divided by $N=64$.  At zero lag, the $xx^*$ branch contains their pairwise differences modulo 16 (middle), while the $xx$ branch contains their pairwise sums (bottom).  Because $\overline{x}_{16}[n\bmod16]=x[n]$ in this pure-periodic example, centering removes every displayed line.}
+\label{fig:twotonesupport}
+\end{figure}
+
+Figure~\ref{fig:twotonesupport} follows those two first-order lines into the zero-lag second-order moments.  The difference bins are $0$, $4$, and $12$, and the sum bins are $2$, $6$, and $10$.  These mean-product lines are genuine components of the raw cyclic moment, but they do not represent independent periodicity of centered fluctuations.  In data, estimating and subtracting the periodic mean before recomputing the second-order statistic helps distinguish what is inherited from first order from what remains in the residual.  Period mismatch, leakage, and mean-estimation error can leave residual mean terms.
 
 \section*{Conclusion}
 
