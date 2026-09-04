@@ -1,8 +1,8 @@
-# First-Order Cyclostationarity and Tone Matched Filtering
+# First-Order Cyclic Moments and Tone Matched Filtering
 
 This repository contains the manuscript source and numerical verification for
-*The First-Order Cyclic Moment Is a Tone Matched-Filter GLRT:
-The Equivalence Chain and Its Conditions*.
+*First-Order Cyclic Moments as Tone Matched-Filter Outputs:
+An Exact Finite-Record Identity*.
 
 ## Reproduce the numerical results
 
@@ -18,21 +18,21 @@ MPLBACKEND=Agg python equivalence_simulation.py
 
 The script uses random seed `20260902` and writes:
 
-- `equivalence_simulation.pdf`, used by the manuscript;
+- `equivalence_simulation.pdf`: vector plot produced by the verification script;
 - `equivalence_simulation.png`, a raster preview.
 
-A successful run reports a direct identity error below `5e-12` and a half-bin
+A successful run reports a complex identity error below `5e-12` and a half-bin
 loss of approximately:
 
 ```text
 half-bin loss: -3.922 dB
 ```
 
-The Monte Carlo result uses 80,000 trials per SNR value, a record length of 64
-samples, and a false-alarm probability of 0.01. The script also checks the
-conventional cyclic mean at cycle frequency \(\alpha\) against the matched
-filter for a tone at frequency \(-\alpha\), and raises an error if their maximum
-difference exceeds the stated tolerance.
+The script checks the selected conjugated first-order coefficient at cycle
+frequency \(\alpha\) against the normalized matched-filter output for a tone at
+frequency \(-\alpha\), including its sign and conjugation convention. It also
+plots the shared rectangular-window mismatch curve obtained when only one
+transform bin is evaluated.
 
 ## Build the manuscript
 
@@ -51,7 +51,7 @@ The resulting manuscript is `tmp/pdfs/main.pdf`.
 
 - `main.tex`: manuscript source;
 - `equivalence_simulation.py`: numerical checks and figure-generation script;
-- `equivalence_simulation.pdf`: generated figure included by the manuscript;
+- `equivalence_simulation.pdf`: vector plot produced by the verification script;
 - `requirements.txt`: version-pinned direct Python dependencies.
 
 The exact manuscript submission should be preserved as an immutable repository

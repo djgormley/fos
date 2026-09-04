@@ -1,70 +1,41 @@
-"""
-Generate the numerical verification results for the accompanying manuscript.
-
-First verify the finite-record test-statistic identity. 
-Next, we estimate the detection probability of the common statistic. 
-Last, we evaluate the loss caused by evaluating an off-grid tone with a single IDFT bin.
-"""
+"""Verify the finite-record identity and plot the shared grid-mismatch curve."""
 
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import ncx2
 
 
 SEED = 20260902
 N = 64
-P_FA = 1e-2
-TRIALS = 80_000
 
 
 def main() -> None:
     rng = np.random.default_rng(SEED)
     alpha = 11 / N
     n = np.arange(N)
-    # The conventional cyclic coefficient at cycle frequency alpha matches a
-    # tone at frequency -alpha in the original record.
     s = np.exp(-1j * 2 * np.pi * alpha * n)
-    sigma2 = 1.0
-    threshold = -np.log(P_FA)
 
-    # First, verify the finite-record identity using independent records.
-    check_trials = 4_000
-    a_check = 10 ** (-14 / 20)
-    w = np.sqrt(sigma2 / 2) * (
-        rng.standard_normal((check_trials, N))
-        + 1j * rng.standard_normal((check_trials, N))
+    # Verify the complex-valued identity on arbitrary finite records:
+    # conj(M_hat(alpha)) = X_N(-alpha)/N = s_{-alpha}^H x / N.
+    check_records = 4_000
+    x = (
+        rng.standard_normal((check_records, N))
+        + 1j * rng.standard_normal((check_records, N))
     )
-    x = a_check * s[None, :] + w
-    phase_correction = np.exp(-1j * 2 * np.pi * alpha * n)
     cyclic_mean = np.mean(
-        np.conj(x) * phase_correction[None, :], axis=1
+        np.conj(x) * np.exp(-1j * 2 * np.pi * alpha * n)[None, :],
+        axis=1,
     )
-    t_cyclic = N * np.abs(cyclic_mean) ** 2 / sigma2
-    matched_output = x @ np.conj(s)
-    t_matched = np.abs(matched_output) ** 2 / (
-        sigma2 * np.vdot(s, s).real
+    matched_projection = (x @ np.conj(s)) / N
+    max_identity_error = np.max(
+        np.abs(np.conj(cyclic_mean) - matched_projection)
     )
-    max_identity_error = np.max(np.abs(t_cyclic - t_matched))
     if max_identity_error > 5e-12:
         raise RuntimeError(f"Identity check failed: {max_identity_error:g}")
 
-    # Next, generate the Monte Carlo detection probabilities directly from the
-    # normalized matched-filter output, which is a sufficient statistic.
-    snr_db = np.arange(-25, -4, 2)
-    snr = 10 ** (snr_db / 10)
-    pd_mc = []
-    for rho in snr:
-        z = (
-            rng.standard_normal(TRIALS) + 1j * rng.standard_normal(TRIALS)
-        ) / np.sqrt(2)
-        t = np.abs(np.sqrt(N * rho) + z) ** 2
-        pd_mc.append(np.mean(t > threshold))
-    pd_mc = np.asarray(pd_mc)
-    pd_theory = ncx2.sf(2 * threshold, df=2, nc=2 * N * snr)
-
-    # Lastly, evaluate the tested-bin response as the frequency offset changes.
+    # Evaluate the rectangular-window response when only one transform bin is
+    # used for a tone at a nearby frequency.
     offset_bins = np.linspace(-1.5, 1.5, 1601)
     delta = offset_bins / N
     numerator = np.sin(np.pi * N * delta)
@@ -83,41 +54,9 @@ def main() -> None:
             "font.size": 9.2,
             "axes.labelsize": 9.2,
             "axes.titlesize": 9.6,
-            "legend.fontsize": 8.2,
         }
     )
-    fig, axes = plt.subplots(1, 2, figsize=(7.25, 2.75), constrained_layout=True)
-
-    ax = axes[0]
-    ax.plot(snr_db, pd_theory, color="#194c80", linewidth=1.8, label="Noncentral $\\chi^2$ theory")
-    ax.plot(
-        snr_db,
-        pd_mc,
-        linestyle="none",
-        marker="o",
-        markersize=4.3,
-        markerfacecolor="white",
-        markeredgewidth=1.2,
-        color="#b4462a",
-        label="Common-statistic Monte Carlo",
-    )
-    ax.set_xlabel("Per-sample SNR (dB)")
-    ax.set_ylabel("Detection probability")
-    ax.set_title(f"(a) Detection-probability verification ($N={N}$)")
-    ax.set_ylim(-0.02, 1.02)
-    ax.set_xlim(snr_db[0], snr_db[-1])
-    ax.grid(True, alpha=0.28)
-    ax.legend(loc="lower right", frameon=True)
-    ax.text(
-        0.03,
-        0.94,
-        rf"$P_{{\rm FA}}={P_FA:g}$",
-        transform=ax.transAxes,
-        ha="left",
-        va="top",
-    )
-
-    ax = axes[1]
+    fig, ax = plt.subplots(figsize=(4.65, 2.8), constrained_layout=True)
     ax.plot(offset_bins, response_db, color="#194c80", linewidth=1.8)
     ax.axvline(-0.5, color="#777777", linestyle="--", linewidth=0.9)
     ax.axvline(0.5, color="#777777", linestyle="--", linewidth=0.9)
@@ -126,12 +65,12 @@ def main() -> None:
     ax.annotate(
         f"Half-bin loss = {half_bin_loss:.2f} dB",
         xy=(0.5, half_bin_loss),
-        xytext=(0.62, -1.1),
+        xytext=(0.64, -1.25),
         arrowprops={"arrowstyle": "->", "color": "#555555", "lw": 0.8},
     )
-    ax.set_xlabel("Tone offset from tested bin (IDFT bins)")
-    ax.set_ylabel("Normalized output (dB)")
-    ax.set_title("(b) Single-bin mismatch loss")
+    ax.set_xlabel("Tone offset from evaluated bin (bins)")
+    ax.set_ylabel("Normalized output power (dB)")
+    ax.set_title(f"Rectangular-window single-bin mismatch ($N={N}$)")
     ax.set_ylim(-30, 1)
     ax.set_xlim(-1.5, 1.5)
     ax.grid(True, alpha=0.28)
@@ -139,7 +78,7 @@ def main() -> None:
     out_dir = Path(__file__).resolve().parent
     for suffix in ("pdf", "png"):
         fig.savefig(out_dir / f"equivalence_simulation.{suffix}", dpi=300)
-    print(f"maximum direct identity error: {max_identity_error:.3e}")
+    print(f"maximum complex identity error: {max_identity_error:.3e}")
     print(f"half-bin loss: {half_bin_loss:.3f} dB")
 
 
