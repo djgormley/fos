@@ -33,7 +33,7 @@
 \newcommand{\CN}{\mathcal{CN}}
 \newcommand{\vect}[1]{\bm{#1}}
 
-\title{A First-Order Cyclostationarity Statistic Is a Tone Matched-Filter GLRT\\
+\title{The First-Order Cyclic Moment Is a Tone Matched-Filter GLRT\\
 {\large The Equivalence Chain and Its Conditions}}
 
 \author{Dylan~J.~Gormley and Kevin~M.~Bandura%
@@ -67,7 +67,7 @@ e^{-j2\pi\alpha t}
 \right\rangle_t ,
 \label{eq:general}
 \end{equation}
-Here, $(*)_{\ell}$ denotes optional conjugation and $\langle\cdot\rangle_t$ denotes a time average.  The full form uses $p$ delays, whereas the reduced form uses $p-1$ relative lags.  Setting $p=1$ leaves one common reference delay.  Keeping the optional-conjugation placeholder $(*)$ visible, shift invariance of the infinite-time average gives
+Here, $(*)_{\ell}$ denotes optional conjugation and $\langle\cdot\rangle_t$ denotes a time average.  The full form uses $p$ delays, whereas the reduced form uses $p-1$ relative lags.  Setting $p=1$ leaves one common reference delay.  Shift invariance of the infinite-time average gives
 \begin{equation}
 R_{x,1}^{\alpha,(*)}(\tau)
 =\left\langle x^{(*)}(t+\tau)e^{-j2\pi\alpha t}\right\rangle_t
@@ -92,6 +92,20 @@ Now evaluate the two choices in~\eqref{eq:firstorderzero}:
 \left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t
 &=\left[\left\langle x(t)e^{+j2\pi\alpha t}\right\rangle_t\right]^*\\
 &=\left[R_{x,1}^{-\alpha}(0)\right]^*.
+\end{aligned}
+\label{eq:conjugation}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+R_{x,1}^{\alpha}(0)
+&
+=\left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t\\
+R_{x,1}^{\alpha,*}(0)
+&
+=\left[\left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t\right]^*
+=\left\langle x(t)e^{+j2\pi\alpha t}\right\rangle_t
+=R_{x,1}^{-\alpha}(0)
 \end{aligned}
 \label{eq:conjugation}
 \end{equation}
