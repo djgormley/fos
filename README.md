@@ -1,7 +1,7 @@
 # First-Order Cyclostationarity and Tone Matched Filtering
 
 This repository contains the manuscript source and numerical verification for
-*A First-Order Cyclostationarity Statistic Is a Tone Matched-Filter GLRT:
+*The First-Order Cyclic Moment Is a Tone Matched-Filter GLRT:
 The Equivalence Chain and Its Conditions*.
 
 ## Reproduce the numerical results
@@ -30,8 +30,9 @@ half-bin loss: -3.922 dB
 
 The Monte Carlo result uses 80,000 trials per SNR value, a record length of 64
 samples, and a false-alarm probability of 0.01. The script also checks the
-cyclic-mean and matched-filter forms directly and raises an error if their maximum
-difference exceeds `5e-12`.
+conventional cyclic mean at cycle frequency \(\alpha\) against the matched
+filter for a tone at frequency \(-\alpha\), and raises an error if their maximum
+difference exceeds the stated tolerance.
 
 ## Build the manuscript
 

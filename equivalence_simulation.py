@@ -3,7 +3,7 @@ Generate the numerical verification results for the accompanying manuscript.
 
 First verify the finite-record test-statistic identity. 
 Next, we estimate the detection probability of the common statistic. 
-Last, we evaluate the loss caused by evaluating an off-grid tone with a single DFT bin.
+Last, we evaluate the loss caused by evaluating an off-grid tone with a single IDFT bin.
 """
 
 from pathlib import Path
@@ -23,7 +23,9 @@ def main() -> None:
     rng = np.random.default_rng(SEED)
     alpha = 11 / N
     n = np.arange(N)
-    s = np.exp(1j * 2 * np.pi * alpha * n)
+    # The conventional cyclic coefficient at cycle frequency alpha matches a
+    # tone at frequency -alpha in the original record.
+    s = np.exp(-1j * 2 * np.pi * alpha * n)
     sigma2 = 1.0
     threshold = -np.log(P_FA)
 
@@ -36,7 +38,9 @@ def main() -> None:
     )
     x = a_check * s[None, :] + w
     phase_correction = np.exp(-1j * 2 * np.pi * alpha * n)
-    cyclic_mean = np.mean(x * phase_correction[None, :], axis=1)
+    cyclic_mean = np.mean(
+        np.conj(x) * phase_correction[None, :], axis=1
+    )
     t_cyclic = N * np.abs(cyclic_mean) ** 2 / sigma2
     matched_output = x @ np.conj(s)
     t_matched = np.abs(matched_output) ** 2 / (
@@ -125,7 +129,7 @@ def main() -> None:
         xytext=(0.62, -1.1),
         arrowprops={"arrowstyle": "->", "color": "#555555", "lw": 0.8},
     )
-    ax.set_xlabel("Tone offset from tested bin (DFT bins)")
+    ax.set_xlabel("Tone offset from tested bin (IDFT bins)")
     ax.set_ylabel("Normalized output (dB)")
     ax.set_title("(b) Single-bin mismatch loss")
     ax.set_ylim(-30, 1)
