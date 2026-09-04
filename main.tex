@@ -4,28 +4,27 @@
 \documentclass[11pt,draftcls,onecolumn,journal]{IEEEtran}
 
 \usepackage{amsmath,amsfonts}
-\usepackage{float}
-\usepackage{array}
 \usepackage{url}
 \usepackage{cite}
 \usepackage{xcolor}
 \usepackage{bm}
 \usepackage[hidelinks]{hyperref}
-\usepackage{booktabs}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \hypersetup{
-  pdftitle={First-Order Cyclic Moments as Tone Matched-Filter Outputs},
-  pdfauthor={Dylan J. Gormley},
-  pdfsubject={First-order cyclostationarity, cyclic means, Fourier coefficients, and tone matched filtering}
+  pdftitle={First-Order Cyclic Moments as Tone Matched-Filter Outputs: Keeping Phase, Conjugation, and Normalization Straight},
+  pdfauthor={Dylan J. Gormley and Kevin M. Bandura},
+  pdfsubject={First-order cyclostationarity, cyclic moments, and tone matched filtering}
 }
 
 \definecolor{deepblue}{HTML}{194C80}
 \definecolor{warmgray}{HTML}{F2F3F5}
 
 \newcommand{\vect}[1]{\bm{#1}}
+\newcommand{\ee}{\mathrm{e}}
+\newcommand{\jj}{\mathrm{j}}
 
 \title{First-Order Cyclic Moments as Tone Matched-Filter Outputs\\
-{\large An Exact Finite-Record Identity}}
+{\large Keeping Phase, Conjugation, and Normalization Straight}}
 
 \author{Dylan~J.~Gormley and Kevin~M.~Bandura%
 \thanks{This work was supported by the National Science Foundation under grant number 2307581.
@@ -39,162 +38,139 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 
 \begin{document}
 \maketitle
-\section*{}
-\label{sec:introduction}
-\IEEEPARstart{C}{yclostationarity} is usually introduced through second- and higher-order statistics, so first order is easy to overlook.  At first order, a reduced-dimension cyclic moment is a cyclic-mean coefficient.  For the complex-correlation configuration used here, the complex conjugate of its finite-record estimate at cycle frequency $\alpha$ is exactly the $1/N$-normalized output of a matched filter for a complex tone at frequency $-\alpha$.
+\noindent Cyclostationarity is usually introduced through second- and higher-order statistics, so its first-order case is easy to overlook.  Yet setting $p=1$ in the general cyclic-moment estimator leaves one signal factor multiplied by a phase correction.  The standard cyclic mean uses the unconjugated factor $x$, and that operation is exactly a normalized tone matched-filter output.  If the remaining factor is $x^*$, the same result follows by conjugation and frequency reflection.  The identity needs no noise model or frequency grid.
 
-The same output is a finite-record Fourier evaluation and, on the transform grid, an inverse discrete Fourier transform (IDFT) output.  These are not separate operations: they are the same projection written with different sign, conjugation, and normalization conventions.  The identity is algebraic and requires no noise or statistical model.  This article derives it from the general cyclic-moment definition and separates the exact identity from the grid used to implement it.
+\section*{Endpoint 1: The Cyclic Estimate}
 
-\section*{Why First Order Becomes a Cyclic Mean}
-
-A $p$th-order cyclic moment averages a product of $p$ possibly conjugated and shifted signal factors after counter-rotation.  The single-signal continuous-time definition is~\cite[eq. (13.1)]{gardner2006}
+Consider a complex record $x[0],\ldots,x[N-1]$, with cycle frequency $\alpha$ measured in cycles per sample and integer sample delays $\vect{\tau}=(\tau_1,\ldots,\tau_p)$.  Let $x^{(0)}\equiv x$ and $x^{(1)}\equiv x^*$, and let $\vect{\kappa}=(\kappa_1,\ldots,\kappa_p)$ record the independently optional factor conjugations.  Using the standard reduced-dimension convention, which fixes one reference delay at zero, a rectangular finite-record estimator of the order-$p$ cyclic moment~\cite[eqs. (13.21) and (13.25)]{gardner2006} is
 \begin{equation}
-R_{x,p}^{\alpha}(\vect{\tau})
-=
-\left\langle
-\prod_{\ell=1}^{p}
-x^{(*)_{\ell}}(t+\tau_{\ell})
-e^{-j2\pi\alpha t}
-\right\rangle_t ,
+\widehat R_{x,p,\vect{\kappa}}^{\alpha}(\vect{\tau})
+=\frac{1}{N_{\vect{\tau}}}
+\sum_{n\in\mathcal I_{\vect{\tau}}}
+\left[
+\prod_{\ell=1}^{p}x^{(\kappa_\ell)}[n+\tau_\ell]
+\right]\ee^{-\jj2\pi\alpha n},
+\qquad \tau_p=0,
 \label{eq:general}
 \end{equation}
-where $(*)_{\ell}$ denotes optional conjugation and $\langle\cdot\rangle_t$ denotes a time average.  Setting $p=1$ leaves one factor and no relative lags.  We use the complex-correlation configuration in which that factor is $x^*$ and denote its coefficient by $M_x^\alpha$.  The remaining reference delay changes only a known phase:
-\begin{equation}
-R_{x,1}^{\alpha}(\tau)
-=\left\langle x^*(t+\tau)e^{-j2\pi\alpha t}\right\rangle_t
-=e^{j2\pi\alpha\tau}R_{x,1}^{\alpha}(0).
-\label{eq:firstorderlag}
-\end{equation}
-The reduced-dimension convention therefore sets the reference delay to zero without losing information~\cite[eq. (13.7)]{gardner2006}:
-\begin{equation}
-M_x^{\alpha}
-\equiv R_{x,1}^{\alpha}(0)
-=\left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t .
-\label{eq:firstorderzero}
-\end{equation}
-Equation~\eqref{eq:firstorderzero} defines the conjugated cyclic-mean convention used below.  The common unstarred convention is~\cite[eq. (2)]{gardner1986}
-\begin{equation*}
-\left\langle x(t)e^{-j2\pi\alpha t}\right\rangle_t
-=\left[M_x^{-\alpha}\right]^*;
-\end{equation*}
-thus, the two first-order configurations determine one another by frequency reflection and conjugation.
+where $\mathcal I_{\vect{\tau}}$ contains the indices for which every shifted sample is available and $N_{\vect{\tau}}=|\mathcal I_{\vect{\tau}}|$.  The exponential is the phase-correction, or counter-rotation, factor: it removes the cycle phase at $\alpha$ before the product is averaged.
 
-\section*{From Cyclic Mean to Tone Matched-Filter Output}
+\section*{Endpoint 2: The Tone Matched Filter}
 
-Consider the complex record $x[0],\ldots,x[N-1]$, with $\alpha$ measured in cycles per sample and understood modulo one.  For an unweighted (rectangular-windowed) record, the selected first-order estimate is
+For a unit-amplitude tone at frequency $f$ cycles per sample, define
 \begin{equation}
-\widehat M_x^{\alpha}
-\equiv\widehat R_{x,1}^{\alpha}(0)
-=\frac{1}{N}\sum_{n=0}^{N-1}x^*[n]e^{-j2\pi\alpha n}.
-\label{eq:cyclicmean}
+s_f[n]=\ee^{\jj2\pi fn},\qquad 0\leq n<N.
+\label{eq:tone}
 \end{equation}
-The operation is easy to picture: conjugate the record, counter-rotate by $\alpha$, and average.  If $x[n]=ae^{-j2\pi\alpha n}$, every corrected sample equals $a^*$ and $\widehat M_x^{\alpha}=a^*$.  At a mismatched frequency, the corrected samples continue to rotate and partially cancel.
-
-Define the ordinary finite-record Fourier evaluation and the length-$N$ tone vector by
-\begin{align}
-X_N(f)&\equiv\sum_{n=0}^{N-1}x[n]e^{-j2\pi fn},
-\label{eq:finitefourier}\\
-\vect{s}_{f}&\equiv
-\begin{bmatrix}
-1 & e^{j2\pi f} & \cdots & e^{j2\pi f(N-1)}
-\end{bmatrix}^{T}.
-\label{eq:tonevector}
-\end{align}
-Conjugating~\eqref{eq:cyclicmean} reverses the exponential sign.  Because $\vect{s}_{-\alpha}^{H}\vect{s}_{-\alpha}=N$, the complete translation is
+The standard matched filter uses the conjugated, time-reversed template~\cite[eqs. (5.28)--(5.29)]{lanterman2016}.  Its discrete-time, causally delayed counterpart places full overlap at output index $N-1$:
+\begin{equation}
+h_f[m]=s_f^*[N-1-m],\qquad 0\leq m<N.
+\label{eq:filter}
+\end{equation}
+At full alignment, its output is
 \begin{equation}
 \begin{aligned}
-\left[\widehat M_x^{\alpha}\right]^*
-&=\left[\widehat R_{x,1}^{\alpha}(0)\right]^*\\
-&=\frac{1}{N}\sum_{n=0}^{N-1}x[n]e^{+j2\pi\alpha n}\\
-&=\frac{X_N(-\alpha)}{N}
-=\frac{\vect{s}_{-\alpha}^{H}\vect{x}}
-       {\vect{s}_{-\alpha}^{H}\vect{s}_{-\alpha}}.
+y_{\mathrm{MF}}(f)
+&\equiv (x*h_f)[N-1]\\
+&=\sum_{n=0}^{N-1}x[n]s_f^*[n]
+=\sum_{n=0}^{N-1}x[n]\ee^{-\jj2\pi fn}.
 \end{aligned}
-\label{eq:chain}
+\label{eq:matchedfilter}
 \end{equation}
-The last expression is the projection coefficient onto the tone at $-\alpha$.  Define the raw matched-filter output as
-\begin{equation*}
-y_{\mathrm{MF}}(-\alpha)\equiv\vect{s}_{-\alpha}^{H}\vect{x},
-\end{equation*}
-so the central identity is
+Because $\sum_{n=0}^{N-1}|s_f[n]|^2=N$, dividing $y_{\mathrm{MF}}(f)$ by $N$ gives the unit-gain projection coefficient.
+
+\section*{Set $p=1$}
+
+At $p=1$, the product in~\eqref{eq:general} contains one factor, so no relative lag remains.  The reduced-dimension rule sets its sole reference delay to zero.  In the underlying time average, another reference delay $\tau$ would only multiply the coefficient by $\ee^{\jj2\pi\alpha\tau}$; zero therefore fixes the time-origin phase.
+
+\textbf{Unconjugated-factor configuration.}
+Setting $\kappa_1=0$ leaves $x[n]$.  The standard cyclic-mean estimate~\cite[eq. (2)]{gardner1986} is therefore
+\begin{equation}
+\begin{aligned}
+\widehat M_x^{\alpha}
+\equiv\widehat R_{x,1,0}^{\alpha}(0)
+&=\frac{1}{N}\sum_{n=0}^{N-1}
+x[n]\ee^{-\jj2\pi\alpha n}
+=\frac{y_{\mathrm{MF}}(\alpha)}{N}.
+\end{aligned}
+\label{eq:cyclicmeanpath}
+\end{equation}
+Here the phase-correction factor in the cyclic mean is exactly the conjugated tone template in~\eqref{eq:matchedfilter}.  No further operation is required.
+
+\textbf{Conjugated-factor configuration.}
+Setting $\kappa_1=1$ leaves $x^*[n]$:
+\begin{equation}
+\widehat R_{x,1,1}^{\alpha}(0)
+=\frac{1}{N}\sum_{n=0}^{N-1}
+x^*[n]\ee^{-\jj2\pi\alpha n}.
+\label{eq:conjugatedfactor}
+\end{equation}
+To relate~\eqref{eq:conjugatedfactor} to the matched filter, conjugate the completed coefficient.  This conjugates both $x^*$ and the phase correction:
+\begin{equation}
+\begin{aligned}
+\left[\widehat R_{x,1,1}^{\alpha}(0)\right]^*
+&=\left[
+\frac{1}{N}\sum_{n=0}^{N-1}
+x^*[n]\ee^{-\jj2\pi\alpha n}
+\right]^*\\
+&=\frac{1}{N}\sum_{n=0}^{N-1}
+\left[x^*[n]\right]^*
+\left[\ee^{-\jj2\pi\alpha n}\right]^*\\
+&=\frac{1}{N}\sum_{n=0}^{N-1}
+x[n]\ee^{+\jj2\pi\alpha n}\\
+&=\frac{1}{N}\sum_{n=0}^{N-1}
+x[n]\ee^{-\jj2\pi(-\alpha)n}
+=\widehat M_x^{-\alpha}
+=\frac{y_{\mathrm{MF}}(-\alpha)}{N}.
+\end{aligned}
+\label{eq:completeconjugation}
+\end{equation}
+The two configurations are therefore conjugate reflections.  Their raw matched-filter outputs are
 \begin{equation}
 \boxed{
+\begin{aligned}
+y_{\mathrm{MF}}(\alpha)
+&=N\widehat M_x^{\alpha}
+=N\widehat R_{x,1,0}^{\alpha}(0),\\
 y_{\mathrm{MF}}(-\alpha)
-=N\left[\widehat M_x^{\alpha}\right]^*
-=N\left[\widehat R_{x,1}^{\alpha}(0)\right]^* .
+&=N\left[\widehat R_{x,1,1}^{\alpha}(0)\right]^*.
+\end{aligned}
 }
-\label{eq:matchedoutput}
+\label{eq:matchedidentities}
 \end{equation}
 
 \begin{center}
 \fcolorbox{deepblue}{warmgray}{%
 \begin{minipage}{0.88\textwidth}
-\textbf{The tip.} To obtain the selected first-order cyclic moment at cycle frequency $\alpha$, correlate the original record with a tone at frequency $-\alpha$, divide by $N$, and conjugate.  Conversely, multiply the conjugated moment by $N$ to recover the raw tone matched-filter output.
+\textbf{The tip.} At first order, the standard cyclic mean and the normalized tone matched-filter output are the same coefficient: $\widehat M_x^{\alpha}=y_{\mathrm{MF}}(\alpha)/N$.  If the optional signal factor is $x^*$ instead, conjugate the completed coefficient and reflect the frequency.  The phase correction is conjugated too, which is why $\alpha\mapsto-\alpha$.
 \end{minipage}}
 \end{center}
 
-\section*{The Transform Grid Is Only an Implementation Choice}
+For example, if $x[n]=a\ee^{\jj2\pi\alpha n}$, the direct path gives $\widehat M_x^{\alpha}=a$ and $y_{\mathrm{MF}}(\alpha)=Na$.  The reflected path gives $\widehat R_{x,1,1}^{-\alpha}(0)=a^*$ and therefore $N[\widehat R_{x,1,1}^{-\alpha}(0)]^*=Na$ as well.
 
-Let $X[k]\equiv X_N(k/N)$ denote the ordinary $N$-point discrete Fourier transform (DFT).  When $\alpha\equiv k/N\pmod 1$, the normalized matched-filter output is an IDFT sample, or equivalently a DFT sample with its bin label reversed:
-\begin{equation}
-\left[\widehat M_x^{k/N}\right]^*
-=\operatorname{IDFT}_N\{\vect{x}\}[k]
-=\frac{X[(-k)\bmod N]}{N}.
-\label{eq:idft}
-\end{equation}
-Equation~\eqref{eq:chain} is exact at every evaluated $\alpha$; a transform grid is required only for the IDFT/DFT shortcut.  Off grid, evaluate $X_N(-\alpha)$ or the tone correlation directly.  Zero padding samples the same finite-record Fourier function more densely; it does not change the identity.  If $N$ samples are padded to length $L$, multiply a standard $1/L$-normalized IDFT by $L/N$ to preserve the $1/N$ normalization.
+\section*{Why Point It Out?}
 
-Table~\ref{tab:translations} separates the exact identity from its grid-specific shortcut.
-\begin{table}[H]
-\centering
-\caption{Three views of the same finite-record projection.}
-\label{tab:translations}
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth}
-                >{\raggedright\arraybackslash}p{0.43\textwidth}
-                >{\raggedright\arraybackslash}p{0.27\textwidth}}
-\toprule
-View & Expression & Scope \\
-\midrule
-Selected coefficient & $\widehat M_x^{\alpha}=N^{-1}\sum_n x^*[n]e^{-j2\pi\alpha n}$ & Rectangular $N$-sample record. \\
-Fourier projection & $[\widehat M_x^{\alpha}]^*=X_N(-\alpha)/N=y_{\mathrm{MF}}(-\alpha)/N$ & Exact for every $\alpha$. \\
-Transform shortcut & $[\widehat M_x^{k/N}]^*=\operatorname{IDFT}_N\{\vect{x}\}[k]=X[(-k)\bmod N]/N$ & Requires $\alpha\equiv k/N\pmod 1$. \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Using only the nearest transform bin introduces the usual scalloping loss.  For a rectangular window with $N=64$, the loss is approximately $3.92$ dB at half-bin offset.  This is an implementation effect, not a restriction on the identity.
-
-\section*{What the Identity Does and Does Not Say}
-
-Equation~\eqref{eq:chain} holds for every finite vector $\vect{x}$.  Interpreting the finite average as an ensemble cyclic mean is a separate statistical step and requires the usual convergence and phase-reference assumptions.  For example, a tone may have fixed phase within each record but random phase between records; each record then has a nonzero projection even though complex averaging across records can tend to zero.  This affects the interpretation, not the identity.
-
-First-order cyclostationarity describes periodic components of the mean~\cite[eqs. (1)--(3)]{gardner1986}.  Higher-order cyclic statistics Fourier-analyze products of samples and can therefore remain nonzero when the cyclic mean vanishes~\cite[eqs. (8.1)--(8.3)]{gardner2006}.  The first-order identity does not collapse that structure.
-
-\section*{Why the Connection Is Useful}
-
-For a carrier, pilot, residual line, or other first-order component, the selected cyclic-mean coefficient can be computed with a tone correlator, a direct finite Fourier evaluation, an IDFT, or an ordinary DFT with reversed bin labels.  The translation brings familiar windowing, leakage, zero-padding, and frequency-refinement tools with it.  It also provides an exact implementation benchmark: disagreement between the cyclic and Fourier forms indicates a sign, conjugation, or normalization error.
-
-The cyclic-mean/DFT relation, in the equivalent unstarred convention, has appeared in harmonic-estimation work~\cite{ghogho1999}.  Writing its full translation to a tone matched-filter output explicitly makes the first-order case accessible and exposes sign, conjugation, and normalization errors.
+The identities provide a simple implementation check: disagreement between~\eqref{eq:cyclicmeanpath} and~\eqref{eq:matchedidentities} exposes a sign, conjugation, or normalization error.  They also place an often-overlooked first-order cyclic quantity in familiar signal-processing language.  A carrier, pilot, or residual line can be handled as either a cyclic-mean coefficient or a tone correlator because, at first order, those are the same finite-record projection.
 
 \section*{Conclusion}
 
-At first order, the selected reduced-dimension cyclic moment is a cyclic-mean coefficient.  For the rectangular $N$-sample record and the complex-correlation configuration used here,
-\begin{equation*}
-\widehat M_x^{\alpha}
-=\widehat R_{x,1}^{\alpha}(0)
-=\left[\frac{X_N(-\alpha)}{N}\right]^*
-=\left[\frac{y_{\mathrm{MF}}(-\alpha)}{N}\right]^*.
-\end{equation*}
-In words, the first-order cyclic moment at cycle frequency $\alpha$ is the conjugate of the normalized tone matched-filter output at frequency $-\alpha$.  This identity holds at every evaluated frequency.  The $N$-point IDFT relation is only a convenient grid-specific implementation of the same projection.
+At $p=1$, the standard cyclic-mean choice $x$ gives the normalized matched-filter output at $+\alpha$ directly.  The optional $x^*$ factor gives the conjugate reflection at $-\alpha$.  Both statements are exact for every finite record and every evaluated $\alpha$.
 
-% Add any acknowledgments and required conflict-of-interest statement before submission.
-\section*{Acknowledgment}
+\section*{Declaration of Interests}
 
 The authors declare no known conflicts of interest.
 
 \begin{thebibliography}{3}
-\bibliographystyle{IEEEtran}
+
+\bibitem{gardner2006}
+W. A. Gardner, A. Napolitano, and L. Paura, ``Cyclostationarity: Half a century of research,''
+\emph{Signal Processing}, vol. 86, no. 4, pp. 639--697, Apr. 2006,
+doi: \href{https://doi.org/10.1016/j.sigpro.2005.06.016}{10.1016/j.sigpro.2005.06.016}.
+
+\bibitem{lanterman2016}
+A. D. Lanterman, J. E. Michaels, and M. B. Egerstedt,
+\href{https://jrom.ece.gatech.edu/wp-content/uploads/sites/466/2016/11/3084book_aug22_2016.pdf}{\emph{Signals and Systems for All Electrical Engineers}}.
+Atlanta, GA, USA: Georgia Institute of Technology, 2016, ch. 5.
 
 \bibitem{gardner1986}
 W. A. Gardner, ``The spectral correlation theory of cyclostationary time-series,''
@@ -202,16 +178,6 @@ W. A. Gardner, ``The spectral correlation theory of cyclostationary time-series,
 doi: \href{https://doi.org/10.1016/0165-1684(86)90092-7}{10.1016/0165-1684(86)90092-7}.
 See also ``Erratum,'' \emph{Signal Processing}, vol. 11, no. 4, p. 405, Dec. 1986,
 doi: \href{https://doi.org/10.1016/0165-1684(86)90080-0}{10.1016/0165-1684(86)90080-0}.
-
-\bibitem{gardner2006}
-W. A. Gardner, A. Napolitano, and L. Paura, ``Cyclostationarity: Half a century of research,''
-\emph{Signal Processing}, vol. 86, no. 4, pp. 639--697, Apr. 2006,
-doi: \href{https://doi.org/10.1016/j.sigpro.2005.06.016}{10.1016/j.sigpro.2005.06.016}.
-
-\bibitem{ghogho1999}
-M. Ghogho, A. Swami, and A. K. Nandi, ``Non-linear least squares estimation for harmonics in multiplicative and additive noise,''
-\emph{Signal Processing}, vol. 78, no. 1, pp. 43--60, Oct. 1999,
-doi: \href{https://doi.org/10.1016/S0165-1684(99)00046-8}{10.1016/S0165-1684(99)00046-8}.
 
 \end{thebibliography}
 
