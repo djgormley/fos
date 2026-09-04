@@ -99,7 +99,7 @@ def main() -> None:
     )
     ax.set_xlabel("Per-sample SNR (dB)")
     ax.set_ylabel("Detection probability")
-    ax.set_title(f"(a) Statistic-equivalence verification ($N={N}$)")
+    ax.set_title(f"(a) Detection-probability verification ($N={N}$)")
     ax.set_ylim(-0.02, 1.02)
     ax.set_xlim(snr_db[0], snr_db[-1])
     ax.grid(True, alpha=0.28)
