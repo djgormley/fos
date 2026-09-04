@@ -50,9 +50,9 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 \maketitle
 \section*{}
 \label{sec:introduction}
-\IEEEPARstart{C}{yclostationarity} is usually introduced through second- and higher-order statistics, so first order is easy to overlook.  At first order, the cyclic moment is the cyclic mean: counter-rotate the record and average.  The same calculation gives a discrete-time Fourier transform (DTFT) sample and a complex-tone correlation, each divided by $N$; on the discrete Fourier transform (DFT) grid, it is $X[k]/N$.  Under the white-Gaussian tone model stated below, its noise-normalized energy is also a generalized likelihood-ratio test (GLRT) statistic for an unknown complex amplitude.
+\IEEEPARstart{C}{yclostationarity} is usually introduced through second- and higher-order statistics, so first order is easy to overlook.  At first order, the cyclic moment is the cyclic mean: counter-rotate the record and average.  The same calculation gives a discrete-time Fourier transform (DTFT) sample and a correlation with a complex tone, each divided by $N$; on the discrete Fourier transform (DFT) grid, it is $X[k]/N$.  Under the white-Gaussian tone model stated below, its noise-normalized energy is also a generalized likelihood-ratio test (GLRT) statistic for an unknown complex amplitude.
 
-This is not a new detector.  The useful point is that a first-order cyclic feature can be implemented and analyzed with familiar tone-detection tools.  Three conditions should be kept separate: the FFT grid affects implementation, the signal and noise model determine optimality, and an ensemble cyclic-mean interpretation requires a stable phase reference and suitable averaging assumptions.  We begin with the first-order reduction, then follow its finite-record estimate through its Fourier, matched-filter, and GLRT interpretations.
+This is not a new detector.  The useful point is that a first-order cyclic feature can be implemented and analyzed with familiar tone-detection tools.  We begin with the first-order reduction, then follow its finite-record estimate through its Fourier, matched-filter, and GLRT interpretations.
 
 \section*{Why First Order Is the Cyclic Mean}
 
@@ -103,7 +103,7 @@ M_x^{\alpha}
 \label{eq:cyclicmeanct}
 \end{equation}
 
-For a sampled finite record, estimate this coefficient with an $N$-sample average.  Interpreting that average as a consistent ensemble estimate additionally requires a common phase reference and an appropriate first-order cycloergodicity or consistency condition.
+For a sampled finite record, estimate this coefficient with the $N$-sample average below.  Treating that finite-record average as an estimate of the ensemble cyclic mean also assumes a shared phase reference and convergence of the time average to the ensemble coefficient.
 
 \section*{The Core Operation: Counter-Rotate, Then Average}
 
@@ -111,7 +111,7 @@ Consider the complex record $x[0],\ldots,x[N-1]$, and let $\alpha$ be the candid
 \begin{equation*}
 z_{\alpha}[n]\equiv x[n]e^{-j2\pi\alpha n}.
 \end{equation*}
-The cyclic-mean estimate is then the ordinary mean of the corrected samples:
+For the unweighted rectangular observation used here, the cyclic-mean estimate is the ordinary mean of the corrected samples:
 \begin{equation}
 \widehat M_x^{\alpha}
 \equiv\widehat R_{x,1}^{\alpha}(0)
@@ -165,7 +165,7 @@ None of the identities above requires a noise model.  The GLRT interpretation re
 \vect{w}\sim\CN(\vect{0},\sigma^2\vect{I}),
 \label{eq:model}
 \end{align}
-Here, $\alpha$ and $\sigma^2$ are known, while the deterministic complex amplitude $a$ is unknown.  The noise is proper complex white Gaussian, with $\E\{\vect{w}\vect{w}^{H}\}=\sigma^2\vect{I}$ and $\E\{\vect{w}\vect{w}^{T}\}=\vect{0}$.  Apart from constants, the log likelihood is
+Here, $\alpha$ and $\sigma^2$ are known, while the deterministic complex amplitude $a$ is unknown.  The noise is proper complex white Gaussian.  Apart from constants, the log likelihood is
 \begin{equation}
 \ell(a)=-\frac{1}{\sigma^2}
 \left\|\vect{x}-a\vect{s}_{\alpha}\right\|^2 .
@@ -187,26 +187,9 @@ T_{\alpha}
 \label{eq:glrt}
 \end{equation}
 
-This result is exact for any finite $N$.  Under~\eqref{eq:model}, the same number is noise-normalized cyclic-mean energy, a normalized periodogram ordinate, and the usual noncoherent GLRT statistic for a tone.  This tone-detection connection is also developed from matched-filter and Fourier viewpoints in~\cite[p. 600]{spooner2009}.
+This result is exact for any finite $N$.  Under~\eqref{eq:model}, the same number is noise-normalized cyclic-mean energy and the usual noncoherent GLRT statistic for a tone.  This tone-detection connection is also developed from matched-filter and Fourier viewpoints in~\cite[p. 600]{spooner2009}.
 
-The covariance-normalized cyclic-feature test gives the same decision rule~\cite[eqs. (B.1)--(B.3)]{dobre2009}.  Define
-\begin{equation}
-\widehat{\vect{m}}
-=\begin{bmatrix}
-\Re\{\widehat M_x^{\alpha}\} &
-\Im\{\widehat M_x^{\alpha}\}
-\end{bmatrix}^{T}.
-\end{equation}
-Under $\mathcal H_0$,
-$\operatorname{cov}(\widehat{\vect{m}})=\sigma^2\vect{I}_2/(2N)$, so
-\begin{equation}
-\widehat{\vect{m}}^{T}
-\operatorname{cov}(\widehat{\vect{m}})^{-1}
-\widehat{\vect{m}}
-=\frac{2N|\widehat M_x^{\alpha}|^2}{\sigma^2}
-=2T_{\alpha}.
-\end{equation}
-Thus, the covariance statistic is $2T_{\alpha}$; the factor of two changes only the threshold scale, not the rejection region.  Kay's complex-envelope sinusoid GLRT uses the same convention~\cite[eqs. (13.49)--(13.53)]{kay1998}.
+Under $\mathcal H_0$, the conventional covariance-normalized test formed from the real and imaginary parts of $\widehat M_x^{\alpha}$ is $2T_{\alpha}$~\cite[eqs. (B.1)--(B.3)]{dobre2009}.  The factor of two only rescales the threshold, so the rejection region is unchanged.
 
 Under $\mathcal H_0$, $T_{\alpha}$ has a unit-mean exponential distribution, so
 \begin{equation}
@@ -222,7 +205,7 @@ The direct implementation has three steps:
 \item Normalize: $T_{\alpha}=|u_{\alpha}|^2/(N\sigma^2)$.
 \item Threshold: decide $\mathcal H_1$ when $T_{\alpha}>\gamma$.
 \end{enumerate}
-This threshold is exact for one preassigned $\alpha$ and known $\sigma^2$.  Estimating $\sigma^2$ changes the null distribution and threshold.
+This threshold is exact for one fixed $\alpha$ and known $\sigma^2$.  Estimating $\sigma^2$ changes the null distribution and threshold.
 \end{samepage}
 Under $\mathcal H_1$,
 \begin{equation}
@@ -231,8 +214,6 @@ Under $\mathcal H_1$,
 \label{eq:noncentral}
 \end{equation}
 which gives the standard noncoherent matched-filter detection probability.  Classical tone-detection performance expressions therefore apply directly to $T_{\alpha}$.
-
-If the complex amplitude $a$ is fully known, the Neyman--Pearson test instead uses the coherent statistic $\Re\{a^*\vect{s}_{\alpha}^{H}\vect{x}\}$.  The estimate $\widehat M_x^{\alpha}$ is still a scaled matched-filter output, but the final scalar test depends on which signal parameters are unknown.
 
 \begin{table}[H]
 \centering
@@ -247,16 +228,14 @@ Role & Statement & What matters \\
 \midrule
 Core identity & $\widehat M_x^{\alpha}=X_N(\alpha)/N=\vect{s}_{\alpha}^{H}\vect{x}/N$ & Exact at every candidate $\alpha$; no FFT grid is required. \\
 Shared FFT-grid issue & $\widehat M_x^{\alpha}=X[k]/N$ & An $N$-point DFT bin is exact when $\alpha\equiv k/N\pmod 1$.  Otherwise, evaluate the DTFT directly or use the usual denser-grid search, interpolation, or refinement. \\
-Detector consequence & $T_{\alpha}=N|\widehat M_x^{\alpha}|^2/\sigma^2$ & The stated GLRT assumes one preassigned $\alpha$ and the white-noise tone model.  A frequency search changes the false-alarm threshold; colored noise uses the standard whitened form. \\
+Detector consequence & $T_{\alpha}=N|\widehat M_x^{\alpha}|^2/\sigma^2$ & The stated GLRT assumes one fixed $\alpha$ and the white-noise tone model.  A frequency search changes the false-alarm threshold; colored noise uses the standard whitened form. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The first row is algebraic; the last is statistical.  Only the middle DFT shortcut requires $\alpha\equiv k/N\pmod 1$.
-
 \section*{Numerical Verification and Grid Mismatch}
 
-To verify the identity, we simulate a length-$64$ complex tone in white noise and compute $T_{\alpha}$ in two ways: from the cyclic mean and from the matched filter.  The largest absolute difference is below $5\times10^{-12}$.  We then perform $80{,}000$ Monte Carlo trials at each SNR value, with $P_{\mathrm{FA}}=0.01$, random seed 20260902, and per-sample SNR $\rho=|a|^2/\sigma^2$.  Figure~\ref{fig:verification}(a) follows the predicted noncentral chi-square law.  The script and version-pinned dependencies are available at \url{https://github.com/djgormley/fos}.
+For a length-$64$ complex tone in white noise, computing $T_{\alpha}$ from the cyclic mean or the matched filter gives the same result to numerical precision.  Figure~\ref{fig:verification}(a) compares the simulated detection probability with the predicted noncentral chi-square law at $P_{\mathrm{FA}}=0.01$, using per-sample SNR $\rho=|a|^2/\sigma^2$.  The repository script reproduces both panels and is available at \url{https://github.com/djgormley/fos}.
 
 Figure~\ref{fig:verification}(b) shows the familiar FFT-grid mismatch.  For the rectangular $N=64$ record, a tone halfway between two bins retains the exact power fraction $[N\sin(\pi/(2N))]^{-2}$, a $3.92$-dB loss when evaluated at one bin.  Evaluating the cyclic mean at the tone's true frequency has no mismatch loss.  Zero padding, interpolation, or frequency refinement provides the same remedies used in higher-order cyclic-spectrum processing.
 
@@ -269,28 +248,20 @@ Figure~\ref{fig:verification}(b) shows the familiar FFT-grid mismatch.  For the 
 
 \section*{Where the Equivalence Needs Care}
 
-The algebraic identity requires no stochastic model.  Unknown frequency, colored noise, and real-valued data change the detector implementation.  Random phase instead affects whether the output represents a nonzero ensemble cyclic mean.
+The finite-record identity remains exact; the following points affect how its output is used or interpreted.
 
 \textbf{Unknown frequency.}
-If the frequency is unknown, we maximize~\eqref{eq:glrt} over a candidate set:
-\begin{equation}
-T=\sup_{\alpha\in\mathcal A}
-\frac{|\vect{s}_{\alpha}^{H}\vect{x}|^2}{N\sigma^2}.
-\end{equation}
-This is a bank of tone matched filters, or a peak-periodogram detector.  When $\mathcal A$ is the DFT grid, an FFT performs the search.  Because several frequencies are tested, the single-frequency threshold in~\eqref{eq:pfa} no longer applies.
+If the frequency is unknown, maximize~\eqref{eq:glrt} over a candidate set.  This gives a bank of tone matched filters, or a peak-periodogram detector; an FFT performs the search on the DFT grid.  Because several frequencies are tested, the single-frequency threshold in~\eqref{eq:pfa} no longer applies.
 
 \textbf{Colored noise.}
-For colored noise with known positive-definite covariance $\vect{C}$ and $\vect{w}\sim\CN(\vect{0},\vect{C})$, the GLRT becomes
+For proper complex $\vect{w}\sim\CN(\vect{0},\vect{C})$ with known positive-definite covariance $\vect{C}$, whitening the record and tone template gives
 \begin{equation}
 T_C=
 \frac{|\vect{s}_{\alpha}^{H}\vect{C}^{-1}\vect{x}|^2}
 {\vect{s}_{\alpha}^{H}\vect{C}^{-1}\vect{s}_{\alpha}}.
 \label{eq:colored}
 \end{equation}
-This is the usual matched filter after whitening both the record and the template.  The raw cyclic-mean or DFT output is generally not optimal.  It gives the same rejection regions, up to a positive scale, only when $\vect{s}_{\alpha}$ is an eigenvector of $\vect{C}$; examples are white noise and DFT-grid tones under a circulant covariance model.
-
-\textbf{Real tones.}
-For a real sinusoid of known frequency but unknown amplitude and phase in real white Gaussian noise, the GLRT uses both the sine and cosine components.  At a non-DC, non-Nyquist DFT bin, these components are orthogonal and the statistic is proportional to $|X[k]|^2$.  Off grid, they are generally not orthogonal, so the full two-component Gram-matrix normalization is required.
+The unweighted cyclic-mean or DFT output remains algebraically equivalent to the tone correlation but is generally not the optimal detector.
 
 \textbf{Random ensemble phase.}
 A finite record can contain a detectable tone even when its ensemble cyclic mean is zero.  Let
@@ -305,15 +276,11 @@ where $A$ is deterministic, $W[n]$ is zero mean, and $\Phi$ is drawn independent
 \end{equation}
 and $|\widehat M_X^{\alpha_0}|^2$ remains detectable.  Thus, complex averaging across independently phased records tends to zero, whereas averaging squared magnitudes preserves the tone energy.
 
-Keep the three claims separate: the finite-record identity is always algebraically exact; the GLRT interpretation requires the stated signal and noise model; and an ensemble cyclic-mean interpretation additionally requires phase coherence or an appropriate cycloergodicity condition.
-
 \section*{Why the Connection Is Useful}
 
-Second- and higher-order cyclic statistics can reveal periodic dependence even when the ordinary mean is zero~\cite[eqs. (8.1)--(8.3)]{gardner2006}.  First order captures periodicity in the mean; its coefficients describe spectral-line components~\cite[eqs. (1)--(3)]{gardner1986}.  Simpler does not mean empty: first-order features have been used, for example, to detect and classify AM and FSK signals~\cite{dobre2009}.
+Second- and higher-order cyclic statistics can reveal periodic dependence when the ordinary mean is zero~\cite[eqs. (8.1)--(8.3)]{gardner2006}.  First order instead describes spectral-line components in the mean~\cite[eqs. (1)--(3)]{gardner1986}; such features have been used to detect and classify AM and FSK signals~\cite{dobre2009}.
 
-The identity translates among cyclic-mean estimation, Fourier analysis, and tone matched filtering.  For a known or searched first-order component---such as a carrier, pilot, residual spectral line, or modulation-dependent mean---an ordinary FFT or tone correlator can be used.  Existing mismatch analysis, thresholds, and performance expressions carry over once the model and normalizations agree.  The GLRT also provides an exact benchmark for checking an implementation.
-
-The connection also helps diagnose a missed feature: possible causes include grid mismatch, colored noise, and loss of phase coherence.  If different records have independent random phases, complex averaging cancels the cyclic mean; noncoherent magnitude-square combining or a higher-order cyclic statistic may then be more appropriate.
+For a carrier, pilot, residual line, or other first-order component, the identity permits an FFT or tone correlator and brings standard mismatch analysis, thresholds, and performance expressions with it.  It also provides an exact implementation benchmark.  A missed feature then points to familiar causes---frequency mismatch, colored noise, or phase incoherence; independent phases may call for magnitude-square combining or a higher-order cyclic statistic.
 
 \section*{Conclusion}
 
@@ -327,7 +294,7 @@ At first order, the reduced-dimension cyclic moment is the cyclic mean.  For a r
 In words, estimating the first-order cyclic moment, evaluating the finite-record DTFT, and correlating with a complex tone produce the same complex output after normalization.
 
 \begin{samepage}
-Under the known-frequency, unknown-complex-amplitude white-Gaussian model in~\eqref{eq:model}, the normalized energy of this common output is the tone matched-filter GLRT statistic:
+Under the model in~\eqref{eq:model}, the normalized energy of this common output is the matched-filter GLRT statistic:
 \begin{equation*}
 \boxed{
 T_{\alpha}
@@ -335,7 +302,7 @@ T_{\alpha}
 }
 \end{equation*}
 \end{samepage}
-Thus, the tone matched-filter GLRT statistic is the first-order cyclic-moment energy measured in noise units.  This equality holds at every evaluated $\alpha$; only the $N$-point DFT-bin shortcut requires $\alpha\equiv k/N\pmod 1$.  Equivalently, $|\widehat R_{x,1}^{\alpha}(0)|=(\sigma/\sqrt{N})\sqrt{T_{\alpha}}$, so $T_{\alpha}$ determines the estimate's magnitude but not its phase.  With known colored-noise covariance, the covariance-weighted statistic $T_C$ in~\eqref{eq:colored} replaces this white-noise form.
+Thus, the tone matched-filter GLRT statistic is the first-order cyclic-moment energy measured in noise units.  This equality holds at every evaluated $\alpha$; only the $N$-point DFT-bin shortcut requires $\alpha\equiv k/N\pmod 1$.  Equivalently, $|\widehat R_{x,1}^{\alpha}(0)|=(\sigma/\sqrt{N})\sqrt{T_{\alpha}}$, so $T_{\alpha}$ determines the estimate's magnitude but not its phase.
 
 The practical lesson is simple: under the stated model, first-order cyclic detection is ordinary tone detection written in cyclic-statistics notation.
 
