@@ -3,12 +3,21 @@
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 
 
 OUTPUT = Path(__file__).with_name("two_tone_support.pdf")
 DEEP_BLUE = "#194C80"
 TEAL = "#197278"
 BURNT_ORANGE = "#A44A1F"
+
+TIMES_DIRECTORY = Path("/usr/share/fonts/truetype/croscore")
+TIMES_FONTS = tuple(TIMES_DIRECTORY.glob("Tinos-*.ttf"))
+for font_file in TIMES_FONTS:
+    font_manager.fontManager.addfont(font_file)
+
+TEXT_FAMILY = "Tinos" if TIMES_FONTS else "STIXGeneral"
+MATH_FONTSET = "cm" if TIMES_FONTS else "stix"
 
 ROWS = (
     (
@@ -41,9 +50,13 @@ ROWS = (
 def main() -> None:
     plt.rcParams.update(
         {
-            "font.family": "serif",
-            "font.size": 8,
-            "mathtext.fontset": "stix",
+            # IEEEtran uses Times-style prose and Computer Modern mathematics.
+            "font.family": TEXT_FAMILY,
+            "font.size": 8.5,
+            "mathtext.fontset": MATH_FONTSET,
+            "axes.labelsize": 9,
+            "xtick.labelsize": 8.5,
+            "ytick.labelsize": 8.5,
             "axes.linewidth": 0.7,
             "pdf.fonttype": 42,
         }
@@ -79,6 +92,7 @@ def main() -> None:
             ha="right",
             va="center",
             color="#38404A",
+            fontsize=8.5,
             transform=axis.transAxes,
         )
 
@@ -91,6 +105,7 @@ def main() -> None:
                 ha="center",
                 va="bottom",
                 color=color,
+                fontsize=8.5,
             )
 
     axes[-1].set_xticks(range(0, 16, 2))
