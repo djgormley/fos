@@ -67,7 +67,7 @@ e^{-j2\pi\alpha t}
 \right\rangle_t ,
 \label{eq:general}
 \end{equation}
-Here, $(*)_{\ell}$ denotes optional conjugation and $\langle\cdot\rangle_t$ denotes a time average.  The full form uses $p$ delays, whereas the reduced form uses $p-1$ relative lags.  Setting $p=1$ leaves one common reference delay.  Shift invariance of the infinite-time average gives
+Here, $(*)_{\ell}$ denotes optional conjugation of the signal factor $x$, and $\langle\cdot\rangle_t$ denotes a time average.  The full form uses $p$ delays, whereas the reduced form uses $p-1$ relative lags.  Setting $p=1$ leaves one common reference delay.  Shift invariance of the infinite-time average gives
 \begin{equation}
 R_{x,1}^{\alpha,(*)}(\tau)
 =\left\langle x^{(*)}(t+\tau)e^{-j2\pi\alpha t}\right\rangle_t
@@ -82,34 +82,19 @@ R_{x,1}^{\alpha,(*)}(0)
 \end{equation}
 With no relative lag, there is also no lag variable to Fourier transform.
 
-Now evaluate the two choices in~\eqref{eq:firstorderzero}:
-\begin{equation}
-\begin{aligned}
-(*)\ \text{omitted:}\quad
-\left\langle x(t)e^{-j2\pi\alpha t}\right\rangle_t
-&=R_{x,1}^{\alpha}(0),\\
-(*)\ \text{applied:}\quad
-\left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t
-&=\left[\left\langle x(t)e^{+j2\pi\alpha t}\right\rangle_t\right]^*\\
-&=\left[R_{x,1}^{-\alpha}(0)\right]^*.
-\end{aligned}
-\label{eq:conjugation}
-\end{equation}
-
+Evaluating the two choices in~\eqref{eq:firstorderzero} gives
 \begin{equation}
 \begin{aligned}
 R_{x,1}^{\alpha}(0)
-&
-=\left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t\\
+&=\left\langle x(t)e^{-j2\pi\alpha t}\right\rangle_t,\\
 R_{x,1}^{\alpha,*}(0)
-&
-=\left[\left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t\right]^*
-=\left\langle x(t)e^{+j2\pi\alpha t}\right\rangle_t
-=R_{x,1}^{-\alpha}(0)
+&=\left\langle x^*(t)e^{-j2\pi\alpha t}\right\rangle_t\\
+&=\left[\left\langle x(t)e^{+j2\pi\alpha t}\right\rangle_t\right]^*
+=\left[R_{x,1}^{-\alpha}(0)\right]^*.
 \end{aligned}
 \label{eq:conjugation}
 \end{equation}
-Thus, once the standard unconjugated coefficients are known at both signs of $\alpha$, the conjugated case comes for free.  For real-valued $x$, the two choices are identical at the same cycle frequency.  We use the unconjugated form from here on and write
+The star following $\alpha$ labels conjugation of the signal factor; it does not conjugate the entire coefficient.  Thus, a two-sided evaluation of the unstarred branch supplies the starred branch for free: negate the cycle frequency and conjugate the result.  For real-valued $x$, the two branches coincide at the same cycle frequency.  We use the unstarred branch from here on and write
 \begin{equation}
 M_x^{\alpha}
 \equiv R_{x,1}^{\alpha}(0)
