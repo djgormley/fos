@@ -38,7 +38,7 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 
 \begin{document}
 \maketitle
-\noindent Cyclostationarity is usually introduced through second- and higher-order statistics, so its first-order case is easy to overlook.  Yet setting $p=1$ in the general cyclic-moment estimator leaves one signal factor multiplied by a phase correction.  The standard cyclic mean uses the star-absent factor $x$, and that operation is exactly a normalized tone matched-filter output.  If the optional star is present and the factor is $x^*$, the same result follows by conjugation and frequency reflection.  The identity needs no noise model or frequency grid.
+\noindent Cyclostationarity is usually introduced through second- and higher-order statistics, so its first-order case is easy to overlook.  Yet setting $p=1$ in the general cyclic-moment estimator leaves one signal factor multiplied by a phase correction.  The two optional-star configurations are the cyclic means of $x$ and $x^*$, denoted $\widehat M_x^{\alpha}$ and $\widehat M_{x^*}^{\alpha}$.  They are conjugate reflections and map symmetrically to a normalized tone matched-filter output.  These identities need no noise model or frequency grid.
 
 \section*{Endpoint 1: The Cyclic Estimate}
 
@@ -58,6 +58,44 @@ where $\mathcal I_{\vect{\tau}}$ contains the indices for which every shifted sa
 Equation~\eqref{eq:general} uses a fixed reference: $\tau_p=0$ places the final factor at $n$, and the other delays are measured relative to it.  The optional star changes a sample's complex value, not its time argument.
 
 At second order, the product is $x[n+\tau]x^{(*)}[n]$~\cite[eq. (3.67)]{gardner2006}; selecting the star does not send $\tau$ to $-\tau$.  A second-order lag changes sign only when the two time arguments are exchanged.  Because correlation labels and subscript conventions vary~\cite[p. 650]{gardner2006}, below we name the first-order branches by the factor that remains.
+
+\section*{Set $p=1$: The Two Cyclic Means}
+
+At $p=1$, the product in~\eqref{eq:general} contains one factor, so no relative lag remains; $(0)$ records the fixed reference.  In the underlying time average, moving that reference to $\tau$ multiplies the coefficient by $\ee^{\jj2\pi\alpha\tau}$ for either factor choice.  Zero therefore fixes the time-origin phase before the finite record is taken.
+
+We show the selected factor directly in the subscript and define the two first-order cyclic means in parallel:
+\begin{equation}
+\begin{aligned}
+\widehat M_x^{\alpha}
+&\equiv\widehat R_{x,1}^{\alpha}(0)
+=\frac{1}{N}\sum_{n=0}^{N-1}
+x[n]\ee^{-\jj2\pi\alpha n},\\
+\widehat M_{x^*}^{\alpha}
+&\equiv\widehat R_{x^*,1}^{\alpha}(0)
+=\frac{1}{N}\sum_{n=0}^{N-1}
+x^*[n]\ee^{-\jj2\pi\alpha n}.
+\end{aligned}
+\label{eq:twocyclicmeans}
+\end{equation}
+The first line is the usual cyclic mean of $x$~\cite[eq. (2)]{gardner1986}; the second is the same definition applied to $x^*$.  Thus the star in $\widehat M_{x^*}^{\alpha}$ belongs to the input sequence, not to the completed coefficient.
+
+Before introducing a matched filter, compare the two cyclic means directly.  Conjugating the completed $x^*$ coefficient gives
+\begin{equation}
+\begin{aligned}
+\left[\widehat M_{x^*}^{\alpha}\right]^*
+&=\left[
+\frac{1}{N}\sum_{n=0}^{N-1}
+x^*[n]\ee^{-\jj2\pi\alpha n}
+\right]^*\\
+&=\frac{1}{N}\sum_{n=0}^{N-1}
+x[n]\ee^{+\jj2\pi\alpha n}\\
+&=\frac{1}{N}\sum_{n=0}^{N-1}
+x[n]\ee^{-\jj2\pi(-\alpha)n}
+=\widehat M_x^{-\alpha}.
+\end{aligned}
+\label{eq:firstorderreflection}
+\end{equation}
+Equation~\eqref{eq:firstorderreflection} shows that, once the completed $x^*$ coefficient is conjugated, the only remaining difference is the negative sign on the cycle frequency.  It is a frequency reflection, not a lag reversal; no relative lag remains at first order.
 
 \section*{Endpoint 2: The Tone Matched Filter}
 
@@ -83,62 +121,24 @@ y_{\mathrm{MF}}(f)
 \end{equation}
 Because $\sum_{n=0}^{N-1}|s_f[n]|^2=N$, dividing $y_{\mathrm{MF}}(f)$ by $N$ gives the unit-gain projection coefficient.
 
-\section*{Set $p=1$}
+\section*{Put the Endpoints Together}
 
-At $p=1$, the product in~\eqref{eq:general} contains one factor, so no relative lag remains; $(0)$ records the fixed reference.  In the underlying time average, moving that reference to $\tau$ multiplies the coefficient by $\ee^{\jj2\pi\alpha\tau}$ for either factor choice.  Zero therefore fixes the time-origin phase before the finite record is taken.  At first order, we display the selected factor directly rather than carrying $\mathcal C$: $R_{x,1}^{\alpha}$ denotes the star-absent branch and $R_{x^*,1}^{\alpha}$ the star-present branch.
-
-\textbf{$x$-factor branch (star absent).}
-The standard cyclic-mean estimate~\cite[eq. (2)]{gardner1986} is
+Comparing the first line of~\eqref{eq:twocyclicmeans} with the final sum in~\eqref{eq:matchedfilter} gives
 \begin{equation}
-\begin{aligned}
-\widehat M_x^{\alpha}
-\equiv\widehat R_{x,1}^{\alpha}(0)
-&=\frac{1}{N}\sum_{n=0}^{N-1}
-x[n]\ee^{-\jj2\pi\alpha n}
-=\frac{y_{\mathrm{MF}}(\alpha)}{N}.
-\end{aligned}
-\label{eq:cyclicmeanpath}
+\widehat M_x^f
+=\widehat R_{x,1}^f(0)
+=\frac{y_{\mathrm{MF}}(f)}{N}.
+\label{eq:directmatch}
 \end{equation}
-Here the phase-correction factor in the cyclic mean is exactly the conjugated tone template in~\eqref{eq:matchedfilter}.  No further operation is required.
-
-\textbf{$x^*$-factor branch (star present).}
-The other first-order configuration leaves $x^*[n]$:
-\begin{equation}
-\widehat R_{x^*,1}^{\alpha}(0)
-=\frac{1}{N}\sum_{n=0}^{N-1}
-x^*[n]\ee^{-\jj2\pi\alpha n}.
-\label{eq:conjugatedfactor}
-\end{equation}
-To relate~\eqref{eq:conjugatedfactor} to the matched filter, conjugate the completed coefficient.  This conjugates both $x^*$ and the phase correction:
-\begin{equation}
-\begin{aligned}
-\left[\widehat R_{x^*,1}^{\alpha}(0)\right]^*
-&=\left[
-\frac{1}{N}\sum_{n=0}^{N-1}
-x^*[n]\ee^{-\jj2\pi\alpha n}
-\right]^*\\
-&=\frac{1}{N}\sum_{n=0}^{N-1}
-\left[x^*[n]\right]^*
-\left[\ee^{-\jj2\pi\alpha n}\right]^*\\
-&=\frac{1}{N}\sum_{n=0}^{N-1}
-x[n]\ee^{+\jj2\pi\alpha n}\\
-&=\frac{1}{N}\sum_{n=0}^{N-1}
-x[n]\ee^{-\jj2\pi(-\alpha)n}
-=\widehat R_{x,1}^{-\alpha}(0)
-=\widehat M_x^{-\alpha}
-=\frac{y_{\mathrm{MF}}(-\alpha)}{N}.
-\end{aligned}
-\label{eq:completeconjugation}
-\end{equation}
-The two configurations are therefore conjugate reflections.  Their raw matched-filter outputs are
+Applying~\eqref{eq:firstorderreflection} at $\alpha=-f$ gives the same coefficient from the star-present branch.  Hence
 \begin{equation}
 \boxed{
 \begin{aligned}
-y_{\mathrm{MF}}(\alpha)
-&=N\widehat M_x^{\alpha}
-=N\widehat R_{x,1}^{\alpha}(0),\\
-y_{\mathrm{MF}}(-\alpha)
-&=N\left[\widehat R_{x^*,1}^{\alpha}(0)\right]^*.
+y_{\mathrm{MF}}(f)
+&=N\widehat M_x^f
+=N\widehat R_{x,1}^f(0),\\
+&=N\left[\widehat M_{x^*}^{-f}\right]^*
+=N\left[\widehat R_{x^*,1}^{-f}(0)\right]^*.
 \end{aligned}
 }
 \label{eq:matchedidentities}
@@ -147,19 +147,19 @@ y_{\mathrm{MF}}(-\alpha)
 \begin{center}
 \fcolorbox{deepblue}{warmgray}{%
 \begin{minipage}{0.88\textwidth}
-\textbf{The tip.} At first order, the standard cyclic mean and the normalized tone matched-filter output are the same coefficient: $\widehat M_x^{\alpha}=y_{\mathrm{MF}}(\alpha)/N$.  If the optional star is present and the factor is $x^*$ instead, conjugate the completed coefficient and reflect the frequency.  The phase correction is conjugated too, which is why $\alpha\mapsto-\alpha$.
+\textbf{The tip.} The two first-order cyclic means satisfy $[\widehat M_{x^*}^{\alpha}]^*=\widehat M_x^{-\alpha}$.  A tone matched filter at $f$ produces $y_{\mathrm{MF}}(f)=N\widehat M_x^f$, and therefore also $y_{\mathrm{MF}}(f)=N[\widehat M_{x^*}^{-f}]^*$.  The $x$ path uses $f$ directly; the $x^*$ path uses $-f$ and conjugates the completed coefficient.
 \end{minipage}}
 \end{center}
 
-For example, if $x[n]=a\ee^{\jj2\pi\alpha n}$, the direct path gives $\widehat M_x^{\alpha}=a$ and $y_{\mathrm{MF}}(\alpha)=Na$.  The reflected path gives $\widehat R_{x^*,1}^{-\alpha}(0)=a^*$ and therefore $N[\widehat R_{x^*,1}^{-\alpha}(0)]^*=Na$ as well.
+For example, if $x[n]=a\ee^{\jj2\pi\alpha n}$, then $\widehat M_x^{\alpha}=a$ and $\widehat M_{x^*}^{-\alpha}=a^*$.  Equation~\eqref{eq:matchedidentities} therefore gives $y_{\mathrm{MF}}(\alpha)=Na$ through the $x$ path directly or through the $x^*$ path after completed conjugation.
 
 \section*{Why Point It Out?}
 
-The identities provide a simple implementation check: disagreement between~\eqref{eq:cyclicmeanpath} and~\eqref{eq:matchedidentities} exposes a sign, conjugation, or normalization error.  They also place an often-overlooked first-order cyclic quantity in familiar signal-processing language.  A carrier, pilot, or residual line can be handled as either a cyclic-mean coefficient or a tone correlator because, at first order, those are the same finite-record projection.
+The identities provide a simple implementation check: disagreement between either cyclic-mean branch and its corresponding equality in~\eqref{eq:matchedidentities} exposes a sign, conjugation, or normalization error.  They also place often-overlooked first-order cyclic quantities in familiar signal-processing language.  A carrier, pilot, or residual line can be handled through either cyclic mean or the corresponding tone correlator because, at first order, they are the same finite-record projection under the stated sign and conjugation convention.
 
 \section*{Conclusion}
 
-At $p=1$, the star-absent factor $x$ gives the normalized matched-filter output at $+\alpha$ directly.  The star-present factor $x^*$ gives the conjugate reflection at $-\alpha$.  Both statements are exact for every finite record and every evaluated $\alpha$.
+At $p=1$, the two optional-star configurations reduce to the conjugate-reflected cyclic means $\widehat M_x^{\alpha}$ and $\widehat M_{x^*}^{\alpha}$.  Their common matched-filter form is $y_{\mathrm{MF}}(f)=N\widehat M_x^f=N[\widehat M_{x^*}^{-f}]^*$.  The identity is exact for every finite record and every evaluated $f$.
 
 \section*{Declaration of Interests}
 

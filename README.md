@@ -17,24 +17,44 @@ python equivalence_simulation.py
 ```
 
 The script uses random seed `20260902` and checks, for seeded random complex
-records and an off-grid cycle frequency, that the standard cyclic mean equals
-the normalized matched-filter output:
+records and an off-grid cycle frequency, the two first-order cyclic means
 
 $$
 \widehat M_x^{\alpha}
 =\widehat R_{x,1}^{\alpha}(0)
-=\frac{y_{\mathrm{MF}}(\alpha)}{N}.
+=\frac{1}{N}\sum_{n=0}^{N-1}
+x[n]\mathrm{e}^{-\mathrm{j}2\pi\alpha n},
 $$
 
-For the optional star-present factor $x^*$, it verifies the
-completed-coefficient conjugation and frequency reflection:
+and
 
 $$
-\left[\widehat R_{x^*,1}^{\alpha}(0)\right]^*
+\widehat M_{x^*}^{\alpha}
+=\widehat R_{x^*,1}^{\alpha}(0)
+=\frac{1}{N}\sum_{n=0}^{N-1}
+x^*[n]\mathrm{e}^{-\mathrm{j}2\pi\alpha n}.
+$$
+
+It also checks their frequency-reflection relation
+
+$$
+\left[\widehat M_{x^*}^{\alpha}\right]^*
+=\left[\widehat R_{x^*,1}^{\alpha}(0)\right]^*
 =\widehat R_{x,1}^{-\alpha}(0)
-=\widehat M_x^{-\alpha}
-=\frac{y_{\mathrm{MF}}(-\alpha)}{N}.
+=\widehat M_x^{-\alpha}.
 $$
+
+It then verifies the symmetric matched-filter identity
+
+$$
+y_{\mathrm{MF}}(f)
+=N\widehat M_x^f
+=N\left[\widehat M_{x^*}^{-f}\right]^*.
+$$
+
+Here $\widehat M_{x^*}^{\alpha}$ means the cyclic mean of the
+conjugated sequence; it is not the conjugate of the completed coefficient
+$\widehat M_x^{\alpha}$.
 
 It also verifies that the tone inner product is the aligned output of the
 conjugated, time-reversed template. A successful run reports all errors below
