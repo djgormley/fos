@@ -1,4 +1,4 @@
-"""Verify the cyclic-mean and conjugated-factor matched-filter identities."""
+"""Verify the cyclic-mean and starred-factor matched-filter identities."""
 
 import numpy as np
 
@@ -22,7 +22,7 @@ def main() -> None:
 
     phase_correction = np.exp(-1j * 2 * np.pi * alpha * n)
     cyclic_mean = np.mean(x * phase_correction, axis=1)
-    conjugated_factor = np.mean(
+    starred_factor = np.mean(
         np.conj(x) * phase_correction, axis=1
     )
 
@@ -34,15 +34,15 @@ def main() -> None:
     cyclic_mean_error = np.max(
         np.abs(cyclic_mean - matched_plus / N)
     )
-    conjugated_factor_error = np.max(
-        np.abs(np.conj(conjugated_factor) - matched_minus / N)
+    starred_factor_error = np.max(
+        np.abs(np.conj(starred_factor) - matched_minus / N)
     )
 
     cyclic_mean_at_minus_alpha = np.mean(
         x * np.exp(1j * 2 * np.pi * alpha * n), axis=1
     )
     reflection_error = np.max(
-        np.abs(conjugated_factor - np.conj(cyclic_mean_at_minus_alpha))
+        np.abs(starred_factor - np.conj(cyclic_mean_at_minus_alpha))
     )
 
     # The inner product is also the aligned convolution output of the
@@ -55,7 +55,7 @@ def main() -> None:
 
     errors = {
         "cyclic-mean branch": cyclic_mean_error,
-        "conjugated-factor branch": conjugated_factor_error,
+        "starred-factor branch": starred_factor_error,
         "conjugate-reflection relation": reflection_error,
         "matched-filter alignment": filter_error,
     }

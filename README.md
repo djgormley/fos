@@ -22,15 +22,16 @@ the normalized matched-filter output:
 
 $$
 \widehat M_x^{\alpha}
-=\widehat R_{x,1,0}^{\alpha}(0)
+=\widehat R_{x,1}^{\alpha}(0)
 =\frac{y_{\mathrm{MF}}(\alpha)}{N}.
 $$
 
-For the optional conjugated factor, it verifies the completed-coefficient
-conjugation and frequency reflection:
+For the optional star-present factor $x^*$, it verifies the
+completed-coefficient conjugation and frequency reflection:
 
 $$
-\left[\widehat R_{x,1,1}^{\alpha}(0)\right]^*
+\left[\widehat R_{x^*,1}^{\alpha}(0)\right]^*
+=\widehat R_{x,1}^{-\alpha}(0)
 =\widehat M_x^{-\alpha}
 =\frac{y_{\mathrm{MF}}(-\alpha)}{N}.
 $$
