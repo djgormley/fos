@@ -35,9 +35,9 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 
 \begin{document}
 \maketitle
-\noindent Cyclostationary theory is best known for its second- and higher-order statistics.  Its moment hierarchy, however, begins at order $p=1$.  For the two first-order branches considered here, we call the star-absent estimate \emph{nonconjugate} and the star-present estimate \emph{conjugate}.  The nonconjugate estimate is exactly a normalized tone matched-filter output.  The conjugate estimate is not a second processor: it follows from the first by conjugation and frequency reflection.  These identities are deterministic, hold at every evaluated frequency, and give first-order cyclostationarity an immediate interpretation in familiar signal-processing terms.
+\noindent Cyclostationary theory is best known for its second- and higher-order statistics.  Its moment hierarchy, however, begins at order $p=1$.  For the two first-order branches considered here, we call the star-absent estimate \emph{nonconjugate} and the star-present estimate \emph{conjugate}.  The nonconjugate estimate is exactly a normalized tone matched-filter output.  The conjugate estimate is not a second processor: it follows from the first by conjugation and frequency reflection.  When the cycle frequencies are harmonics of a known period, the complete bank of these tone projections reconstructs the phase-synchronous average, a finite-record estimate of the periodic mean.  That reconstruction also provides a natural first step before second-order analysis, because products of mean harmonics can appear as cycles in raw second-order moments.
 
-The individual links are classical.  Gardner identifies the cyclic mean with the coefficient of a finite-strength additive sine wave and derives it through an individual harmonic-selecting filter~\cite[eqs. (17)--(21)]{gardner1986}.  Harmonic-estimation work identifies the data DFT as the cyclic mean and relates DFT peak picking to fitting a constant-amplitude harmonic~\cite[Sec. 1]{ghogho1999}.  Taken together, these treatments supply the ingredients of the finite-record relation.  Here we first derive that relation along the direct, nonconjugate path and then recover the conjugate case from it.  That small synthesis is the point: a familiar tone projection is already present at the first order of the general cyclostationary framework.
+The individual links are classical.  Gardner identifies the cyclic mean with the coefficient of a finite-strength additive sine wave and derives both individual harmonic selection and synchronized averaging~\cite[eqs. (17)--(23)]{gardner1986}.  Harmonic-estimation work identifies the data DFT as the cyclic mean and relates DFT peak picking to fitting a constant-amplitude harmonic~\cite[Sec. 1]{ghogho1999}.  The general cyclic moment--cumulant relation also accounts for products of lower-order cyclic components~\cite[eq. (13.12)]{gardner2006}.  Here we make the finite-record matched-filter equality explicit, derive its two first-order branches, and then use those established results as consequences: the matched-filter bank reconstructs the periodic mean, and the mean spectrum predicts which second-order cycles may be inherited from first order.  The compact finite-record bridge, rather than a new theory of synchronized averaging or cumulants, is the point.
 
 \section*{Start with the General Cyclic Moment}
 
@@ -146,13 +146,74 @@ y_{\mathrm{MF}}(f)
 \end{equation}
 Over a two-sided cycle-frequency domain, either case determines the other.
 
-\section*{Why the Identity Is Worth Stating}
+\section*{From One Projection to the Periodic Mean}
 
-The principal result is the direct equality in~\eqref{eq:directmatch}.  It shows that first-order cyclostationary analysis and tone matched filtering describe the same finite-record projection from different viewpoints.  A carrier, pilot, or residual line can therefore be interpreted in either vocabulary, and an existing tone-correlator or DTFT implementation can evaluate the cyclic mean directly.  The factor $N$ separates the normalizations, not the underlying computation.  The conjugate relation then supplies the reflected-frequency form, while both equalities provide checks on frequency sign, conjugation, and normalization.
+Now suppose the mean has integer period $P$ samples and the record contains $L$ complete periods, so that $N=LP$.  Its phase-synchronous average is
+\begin{equation}
+\overline{x}_P[r]
+=\frac{1}{L}\sum_{\ell=0}^{L-1}x[r+\ell P],
+\qquad 0\leq r<P.
+\label{eq:phaseaverage}
+\end{equation}
+Evaluating the cyclic mean at the $P$ harmonics and writing $n=r+\ell P$ gives the finite Fourier-series pair
+\begin{equation}
+\begin{aligned}
+\widehat M_x^{k/P}
+&=\frac{1}{P}\sum_{r=0}^{P-1}
+\overline{x}_P[r]\ee^{-\jj2\pi kr/P},\\
+\overline{x}_P[r]
+&=\sum_{k=0}^{P-1}
+\widehat M_x^{k/P}\ee^{\jj2\pi kr/P},
+\end{aligned}
+\qquad 0\leq k<P.
+\label{eq:periodicbank}
+\end{equation}
+Thus one cyclic mean is one normalized tone projection, while the complete bank gives the Fourier coordinates of the synchronized average.  Equation~\eqref{eq:periodicbank} is the finite-record form of the synchronized-averaging identity~\cite[eq. (23)]{gardner1986}.  Since each $\overline{x}_P[r]$ is also the least-squares constant fitted to the samples in phase class $r$, the reconstructed sequence $\overline{x}_P[n\bmod P]$ is the least-squares projection of the record onto the space of $P$-periodic sequences.
+
+This interpretation gives an exact finite-record centering operation.  Define
+\begin{equation}
+\widehat u[n]=x[n]-\overline{x}_P[n\bmod P].
+\label{eq:centeredrecord}
+\end{equation}
+On the same $L$ complete periods, its entire first-order harmonic bank vanishes:
+\begin{equation}
+\widehat M_{\widehat u}^{k/P}=0,
+\qquad 0\leq k<P.
+\label{eq:centeredbank}
+\end{equation}
+
+\section*{Why First Order Comes First}
+
+The centering step matters when raw higher-order moments are interpreted.  At the population or infinite-time-average level, write the periodic mean and centered residual as
+\begin{equation}
+m[n]=\sum_{\beta\in\mathcal A_1}
+M_x^{\beta}\ee^{\jj2\pi\beta n},
+\qquad u[n]=x[n]-m[n],
+\label{eq:meanexpansion}
+\end{equation}
+where $\mathcal A_1$ is the set of first-order cycle frequencies.  Applying the classical moment--cumulant decomposition~\cite[eq. (13.12)]{gardner2006} to the second-order branch formed from $x[n+\tau]x^*[n]$ gives
+\begin{equation}
+R_{xx^*}^{\alpha}(\tau)
+=R_{uu^*}^{\alpha}(\tau)
++\sum_{\beta\in\mathcal A_1}
+M_x^{\beta}
+\left[M_x^{\beta-\alpha}\right]^*
+\ee^{\jj2\pi\beta\tau}.
+\label{eq:meaninduced}
+\end{equation}
+With absent coefficients treated as zero and discrete-time cycle frequencies taken modulo one, the $x[n+\tau]x^*[n]$ branch inherits candidate differences of first-order frequencies; the $x[n+\tau]x[n]$ branch inherits candidate sums.  Coincident frequencies and cancellation can suppress individual terms.
+
+For example, if
+\begin{equation}
+m[n]=a_1\ee^{\jj2\pi\beta_1n}
++a_2\ee^{\jj2\pi\beta_2n},
+\label{eq:twotonemean}
+\end{equation}
+then the mean product $m[n+\tau]m^*[n]$ has cycles at $0$ and $\pm(\beta_1-\beta_2)$, whereas $m[n+\tau]m[n]$ has cycles at $2\beta_1$, $\beta_1+\beta_2$, and $2\beta_2$, modulo one.  These terms are genuine components of the raw cyclic moment, but they do not represent independent periodicity of the centered fluctuations.  Estimating and subtracting the periodic mean before recomputing the second-order statistic helps distinguish what is inherited from first order from what remains in the residual.  With a finite record, period mismatch, leakage, and mean-estimation error can leave residual mean terms.
 
 \section*{Conclusion}
 
-At $p=1$, the nonconjugate cyclic estimate collapses to a familiar tone projection: $y_{\mathrm{MF}}(f)=N\widehat M_x^f$.  That is the central finite-record identity.  The conjugate case follows by conjugating the completed coefficient and reflecting the cycle frequency, giving $y_{\mathrm{MF}}(f)=N[\widehat M_{x^*}^{-f}]^*$.  The conjugation convention extends the result; it does not define it.
+At first order, the cyclic mean and a normalized tone matched-filter output are the same finite-record projection: $y_{\mathrm{MF}}(f)=N\widehat M_x^f$.  The conjugate case follows by conjugating the completed coefficient and reflecting the cycle frequency.  A complete harmonic bank reconstructs the phase-synchronous average, and its support marks candidate sum- and difference-frequency contributions of that mean to raw second-order moments.  The matched-filter view therefore connects one coefficient, periodic reconstruction, and first-order centering without recasting the established reconstruction and moment-decomposition results as new.
 
 
 \begin{thebibliography}{4}
