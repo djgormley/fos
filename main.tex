@@ -40,6 +40,8 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 \maketitle
 \noindent Cyclostationarity is usually introduced through second- and higher-order statistics, so its first-order case is easy to overlook.  Yet setting $p=1$ in the general cyclic-moment estimator leaves one signal factor multiplied by a phase correction.  The two optional-star configurations are the cyclic means of $x$ and $x^*$, denoted $\widehat M_x^{\alpha}$ and $\widehat M_{x^*}^{\alpha}$.  They are conjugate reflections and map symmetrically to a normalized tone matched-filter output.  These identities need no noise model or frequency grid.
 
+Classical theory identifies the cyclic mean with the coefficient of a finite-strength additive sine wave and derives it through an individual harmonic-selecting filter~\cite[eqs. (17)--(21)]{gardner1986}.  Harmonic-estimation work likewise identifies the data DFT as the cyclic mean and relates DFT peak picking to fitting a constant-amplitude harmonic~\cite[Sec. 1]{ghogho1999}.  The pedagogical point here is to make the exact finite-record tone matched-filter identity explicit, including its normalization and the conjugate-reflected optional-star branch.
+
 \section*{Endpoint 1: The Cyclic Estimate}
 
 Consider a complex record $x[0],\ldots,x[N-1]$, with cycle frequency $\alpha$ measured in cycles per sample and integer sample delays $\vect{\tau}=(\tau_1,\ldots,\tau_p)$.  Following Gardner et al., let $x^{(*)_\ell}$ mean that the $\ell$th factor is either $x$ or $x^*$, and let $\mathcal{C}=((*)_1,\ldots,(*)_p)$ denote the selected conjugation configuration.  Replacing the time average in Gardner's reduced-dimension order-$p$ cyclic moment~\cite[eqs. (13.21) and (13.25)]{gardner2006} with an equally weighted average over the available finite record gives
@@ -165,7 +167,20 @@ At $p=1$, the two optional-star configurations reduce to the conjugate-reflected
 
 The authors declare no known conflicts of interest.
 
-\begin{thebibliography}{3}
+\begin{thebibliography}{4}
+
+\bibitem{gardner1986}
+W. A. Gardner, ``The spectral correlation theory of cyclostationary time-series,''
+\emph{Signal Processing}, vol. 11, no. 1, pp. 13--36, Jul. 1986,
+doi: \href{https://doi.org/10.1016/0165-1684(86)90092-7}{10.1016/0165-1684(86)90092-7}.
+See also ``Erratum,'' \emph{Signal Processing}, vol. 11, no. 4, p. 405, Dec. 1986,
+doi: \href{https://doi.org/10.1016/0165-1684(86)90080-0}{10.1016/0165-1684(86)90080-0}.
+
+\bibitem{ghogho1999}
+M. Ghogho, A. Swami, and A. K. Nandi,
+``Non-linear least squares estimation for harmonics in multiplicative and additive noise,''
+\emph{Signal Processing}, vol. 78, no. 1, pp. 43--60, Oct. 1999,
+doi: \href{https://doi.org/10.1016/S0165-1684(99)00046-8}{10.1016/S0165-1684(99)00046-8}.
 
 \bibitem{gardner2006}
 W. A. Gardner, A. Napolitano, and L. Paura, ``Cyclostationarity: Half a century of research,''
@@ -176,13 +191,6 @@ doi: \href{https://doi.org/10.1016/j.sigpro.2005.06.016}{10.1016/j.sigpro.2005.0
 A. D. Lanterman, J. E. Michaels, and M. B. Egerstedt,
 \href{https://jrom.ece.gatech.edu/wp-content/uploads/sites/466/2016/11/3084book_aug22_2016.pdf}{\emph{Signals and Systems for All Electrical Engineers}}.
 Atlanta, GA, USA: Georgia Institute of Technology, 2016, ch. 5.
-
-\bibitem{gardner1986}
-W. A. Gardner, ``The spectral correlation theory of cyclostationary time-series,''
-\emph{Signal Processing}, vol. 11, no. 1, pp. 13--36, Jul. 1986,
-doi: \href{https://doi.org/10.1016/0165-1684(86)90092-7}{10.1016/0165-1684(86)90092-7}.
-See also ``Erratum,'' \emph{Signal Processing}, vol. 11, no. 4, p. 405, Dec. 1986,
-doi: \href{https://doi.org/10.1016/0165-1684(86)90080-0}{10.1016/0165-1684(86)90080-0}.
 
 \end{thebibliography}
 
