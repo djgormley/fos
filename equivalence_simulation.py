@@ -57,8 +57,8 @@ def main() -> None:
     filter_error = np.max(np.abs(aligned_convolution - matched_plus))
 
     errors = {
-        "M_x branch": cyclic_mean_x_error,
-        "M_x_star branch": cyclic_mean_x_star_error,
+        "nonconjugate case": cyclic_mean_x_error,
+        "conjugate case": cyclic_mean_x_star_error,
         "cyclic-mean reflection": cyclic_mean_reflection_error,
         "matched-filter alignment": filter_error,
     }

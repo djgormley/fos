@@ -17,7 +17,8 @@ python equivalence_simulation.py
 ```
 
 The script uses random seed `20260902` and checks, for seeded random complex
-records and an off-grid cycle frequency, the two first-order cyclic means
+records and an off-grid cycle frequency, the nonconjugate and conjugate
+first-order cyclic means
 
 $$
 \widehat M_x^{\alpha}
