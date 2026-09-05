@@ -1,16 +1,14 @@
 \documentclass[11pt,draftcls,onecolumn,journal]{IEEEtran}
 
 \usepackage{amsmath,amsfonts}
-\usepackage{graphicx}
 \usepackage{url}
 \usepackage{cite}
 \usepackage{xcolor}
 \usepackage{bm}
-\usepackage{placeins}
 \usepackage[hidelinks]{hyperref}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \hypersetup{
-  pdftitle={First-Order Cyclic Moments as Tone Matched-Filter Outputs: The Finite-Record Identity Made Explicit},
+  pdftitle={First-Order Cyclic Moments as Tone Matched-Filter Outputs: From Individual Tone Projections to Periodic-Mean Reconstruction},
   pdfauthor={Dylan J. Gormley and Kevin M. Bandura},
   pdfsubject={First-order cyclostationarity, cyclic moments, and tone matched filtering}
 }
@@ -37,9 +35,9 @@ Dylan J. Gormley and Kevin~M.~Bandura are with West Virginia University's Depart
 
 \begin{document}
 \maketitle
-\noindent Cyclostationary theory is best known for its second- and higher-order statistics.  Its moment hierarchy, however, begins at order $p=1$.  For the two first-order branches considered here, we call the star-absent estimate \emph{nonconjugate} and the star-present estimate \emph{conjugate}.  The nonconjugate estimate is exactly a normalized tone matched-filter output.  The conjugate estimate is not a second processor: it follows from the first by conjugation and frequency reflection.  When the cycle frequencies are harmonics of a known period and the record spans an integer number of complete periods, the complete bank of these tone projections reconstructs the phase-synchronous average, a finite-record estimate of the periodic mean.  The reconstructed mean is also a useful diagnostic before raw second-order moments are interpreted, because products of mean harmonics can appear as cycles in those moments.
+\noindent Cyclostationary theory is best known for its second- and higher-order statistics.  Its moment hierarchy, however, begins at order $p=1$.  Two first-order branches exist, depending on whether the record $x$ or its complex conjugate $x^*$ is fed to the estimator.  As at second order, where the conjugate cyclic autocorrelation is the cyclic cross-correlation of $x$ with its conjugate~\cite[Sec. 2.4]{gardner1986}, we call the branch fed by $x$ \emph{nonconjugate} and the branch fed by $x^*$ \emph{conjugate}.  The nonconjugate estimate is exactly a normalized tone matched-filter output, equivalently the least-squares amplitude of a tone at the cycle frequency.  The conjugate estimate is not a second estimator: it follows from the first by conjugation and frequency reflection.  When the cycle frequencies are harmonics of a known period and the record spans an integer number of complete periods, the complete bank of these tone projections is the phase-synchronous average, a finite-record estimate of the periodic mean.
 
-The individual links are classical.  Gardner identifies the cyclic mean with the coefficient of a finite-strength additive sine wave and derives both individual harmonic selection and synchronized averaging~\cite[eqs. (17)--(23)]{gardner1986}.  Harmonic-estimation work identifies the data DFT as the cyclic mean and relates DFT peak picking to fitting a constant-amplitude harmonic~\cite[Sec. 1]{ghogho1999}.  The general cyclic moment--cumulant relation also accounts for products of lower-order cyclic components~\cite[eq. (13.12)]{gardner2006}.  Here we make the finite-record matched-filter equality explicit, derive its two first-order branches, and use it as common notation for two established consequences: the complete bank reconstructs the periodic mean, and its significant coefficients identify candidate mean-induced second-order cycle frequencies.  The compact finite-record bridge, rather than a new theory of synchronized averaging or cumulants, is the point.
+The individual links are classical.  Gardner identifies the cyclic mean with the coefficient of a finite-strength additive sine wave and derives both individual harmonic selection and synchronized averaging~\cite[eqs. (17)--(23)]{gardner1986}.  Harmonic-estimation work identifies the data DFT as the cyclic mean and relates DFT peak picking to fitting a constant-amplitude harmonic~\cite[Sec. 1]{ghogho1999}.  Here we make the finite-record matched-filter equality explicit, normalization included, derive its two first-order branches, and record where the bank leads.  None of the results is new; the compact finite-record statement is the point.
 
 \section*{Start with the General Cyclic Moment}
 
@@ -60,7 +58,7 @@ Gardner's reduced-dimension convention fixes the final factor at zero delay, so 
 
 \section*{Stop at First Order: The Nonconjugate Case}
 
-First take the star-absent factor configuration---the nonconjugate first-order case---and suppress $\mathcal C$ in the notation for this branch.  At $p=1$, the product in~\eqref{eq:general} contains only the fixed-reference sample.  There is no relative delay to estimate; the $(0)$ simply records the reference already fixed in~\eqref{eq:general}.  The estimator therefore becomes
+First feed the estimator with $x$ itself---the nonconjugate first-order case---and suppress $\mathcal C$ in the notation for this branch.  At $p=1$, the product in~\eqref{eq:general} contains only the fixed-reference sample.  There is no relative delay to specify; the $(0)$ simply records the reference already fixed in~\eqref{eq:general}.  The estimator therefore becomes
 
 \begin{equation}
 \widehat M_x^{\alpha}
@@ -78,7 +76,7 @@ To identify the resulting sum, including its normalization, consider a unit-ampl
 s_f[n]=\ee^{\jj2\pi fn},\qquad 0\leq n<N.
 \label{eq:tone}
 \end{equation}
-The standard matched filter uses the conjugated, time-reversed template~\cite[eqs. (5.28)--(5.29)]{lanterman2016}.  Its discrete-time, causally delayed counterpart places full overlap at output index $N-1$:
+The standard matched filter uses the conjugated, time-reversed template~\cite[chs. 4 and 13]{kay1998}.  Its discrete-time, causally delayed counterpart places full overlap at output index $N-1$:
 \begin{equation}
 h_f[m]=s_f^*[N-1-m],\qquad 0\leq m<N.
 \label{eq:filter}
@@ -93,10 +91,18 @@ y_{\mathrm{MF}}(f)
 \end{aligned}
 \label{eq:matchedfilter}
 \end{equation}
+The earlier output samples are not wasted.  For $0\leq m<N-1$,
+\begin{equation}
+(x*h_f)[m]
+=\ee^{-\jj2\pi f(N-1-m)}
+\sum_{n=0}^{m}x[n]\ee^{-\jj2\pi fn},
+\label{eq:runningoutput}
+\end{equation}
+so the filter also delivers the projection of every growing sub-record, up to a known phase ramp, as the samples arrive; dividing by $m+1$ traces the estimate's convergence.
 
 \section*{State the Direct Identity}
 
-Because $\sum_{n=0}^{N-1}|s_f[n]|^2=N$, dividing $y_{\mathrm{MF}}(f)$ by $N$ gives the unit-gain projection coefficient.  With $f=\alpha$, the sums in~\eqref{eq:cyclicmean} and~\eqref{eq:matchedfilter} are term-for-term identical.  Therefore,
+Because $\sum_{n=0}^{N-1}|s_f[n]|^2=N$, dividing $y_{\mathrm{MF}}(f)$ by $N$ gives the least-squares amplitude of a tone at $f$: the value of $a$ that minimizes $\sum_{n=0}^{N-1}|x[n]-a\,s_f[n]|^2$.  With $f=\alpha$, the sums in~\eqref{eq:cyclicmean} and~\eqref{eq:matchedfilter} are term-for-term identical.  Therefore,
 \begin{equation}
 \boxed{
 y_{\mathrm{MF}}(f)
@@ -105,12 +111,12 @@ y_{\mathrm{MF}}(f)
 }.
 \label{eq:directmatch}
 \end{equation}
-Equivalently, $\widehat M_x^f=y_{\mathrm{MF}}(f)/N$.  This completes the direct derivation: the cyclic mean is the unit-gain projection coefficient, whereas $y_{\mathrm{MF}}(f)$ is the unnormalized filter output.
+Equivalently, $\widehat M_x^f=y_{\mathrm{MF}}(f)/N$.  This completes the direct derivation: the cyclic mean is the least-squares tone amplitude, whereas $y_{\mathrm{MF}}(f)$ is the unnormalized filter output.
 
 \begin{center}
 \fcolorbox{deepblue}{warmgray}{%
 \begin{minipage}{0.88\textwidth}
-\textbf{The tip.} The nonconjugate first-order cyclic-mean estimate is exactly a normalized tone matched-filter output: $y_{\mathrm{MF}}(f)=N\widehat M_x^f$.  This deterministic identity holds for every finite record and every evaluated $f$.
+\textbf{The tip.} At first order, the cyclic-mean estimate, the normalized tone matched-filter output, and the least-squares tone amplitude are the same finite-record number: $y_{\mathrm{MF}}(f)=N\widehat M_x^f$, for every record and every evaluated $f$.  A tone matched filter and a cyclic-mean estimator implemented separately compute the same quantity and differ only by the factor $N$.
 \end{minipage}}
 \end{center}
 
@@ -120,7 +126,7 @@ The identity is purely algebraic and needs neither a noise model nor an FFT-bin 
 
 \section*{The Conjugate Case}
 
-The star-present configuration, which we call the conjugate case, does not introduce a second processor.  Its specialization of~\eqref{eq:general} at $p=1$ is
+Feeding the estimator with $x^*$ instead---the conjugate case---does not introduce a second estimator.  Its specialization of~\eqref{eq:general} at $p=1$ is
 \begin{equation}
 \widehat M_{x^*}^{\alpha}
 \equiv\frac{1}{N}\sum_{n=0}^{N-1}
@@ -148,92 +154,39 @@ y_{\mathrm{MF}}(f)
 \end{equation}
 Over a two-sided cycle-frequency domain, either case determines the other.
 
-\section*{Using the Tone Matched-Filter Bank to Reconstruct the Periodic Mean}
+\section*{The Harmonic Bank Reconstructs the Periodic Mean}
 
 Equation~\eqref{eq:directmatch} lets us view the classical synchronized-averaging identity directly through the tone matched-filter bank.  Suppose the mean has integer period $P$ samples and the record contains $L$ complete periods, so that $N=LP$.  Its phase-synchronous average is
 \begin{equation}
-\overline{x}_P[r]
+\widehat m_P[r]
 =\frac{1}{L}\sum_{\ell=0}^{L-1}x[r+\ell P],
 \qquad 0\leq r<P.
 \label{eq:phaseaverage}
 \end{equation}
-Here and below, the overbar denotes phase averaging, not complex conjugation.
-Evaluating the cyclic mean at the $P$ harmonics and writing $n=r+\ell P$ gives the finite Fourier-series pair
+Evaluating the cyclic mean at the $P$ harmonics $k/P=kL/N$---every $L$th bin of the $N$-point DFT---and writing $n=r+\ell P$ gives the finite Fourier-series pair
 \begin{equation}
 \begin{aligned}
 \frac{y_{\mathrm{MF}}(k/P)}{N}
 =\widehat M_x^{k/P}
 &=\frac{1}{P}\sum_{r=0}^{P-1}
-\overline{x}_P[r]\ee^{-\jj2\pi kr/P},\\
-\overline{x}_P[r]
+\widehat m_P[r]\ee^{-\jj2\pi kr/P},\\
+\widehat m_P[r]
 &=\frac{1}{N}\sum_{k=0}^{P-1}
 y_{\mathrm{MF}}(k/P)\ee^{\jj2\pi kr/P},
 \end{aligned}
 \qquad 0\leq k,r<P.
 \label{eq:periodicbank}
 \end{equation}
-Thus the established synchronized average can be read directly as an inverse transform of the tone-bank outputs: one bank output supplies one harmonic coefficient, and the complete bank reconstructs the periodic mean.  The underlying synchronized-averaging identity is classical~\cite[eq. (23)]{gardner1986}; equation~\eqref{eq:periodicbank} simply writes its finite-record form in matched-filter notation.  Since each $\overline{x}_P[r]$ is also the least-squares constant fitted to the samples in phase class $r$, the reconstructed sequence $\overline{x}_P[n\bmod P]$ is the least-squares projection of the record onto the space of $P$-periodic sequences.
+Thus the established synchronized average can be read directly as an inverse transform of the tone-bank outputs: one bank output supplies one harmonic coefficient, and the complete bank reconstructs the periodic mean.  The underlying synchronized-averaging identity is classical~\cite[eq. (23)]{gardner1986}; equation~\eqref{eq:periodicbank} simply writes its finite-record form in matched-filter notation.  Since each $\widehat m_P[r]$ is also the least-squares constant fitted to the samples in phase class $r$, the reconstructed sequence $\widehat m_P[n\bmod P]$ is the least-squares projection of the record onto the space of $P$-periodic sequences, the $P$-tone counterpart of the single-tone least-squares amplitude in~\eqref{eq:directmatch}.  Subtracting $\widehat m_P[n\bmod P]$ from the record therefore leaves a sequence whose bank at the $P$ harmonics is exactly zero.
 
-This interpretation gives an exact finite-record centering operation.  Define
-\begin{equation}
-\widehat u[n]=x[n]-\overline{x}_P[n\bmod P].
-\label{eq:centeredrecord}
-\end{equation}
-On the same $L$ complete periods, its entire first-order harmonic bank vanishes:
-\begin{equation}
-\widehat M_{\widehat u}^{k/P}=0,
-\qquad 0\leq k<P.
-\label{eq:centeredbank}
-\end{equation}
-By~\eqref{eq:directmatch}, the corresponding tone matched-filter outputs vanish as well.
-
-\section*{The Same Bank Marks Candidate Mean-Induced Second-Order Cycles}
-
-The same bank also supplies a support check before raw second-order moments are interpreted.  The mechanism is classical: products of lower-order cyclic components contribute to higher-order moments.  At the population or infinite-time-average level, write the periodic mean and centered residual as
-\begin{equation}
-m[n]=\sum_{\beta\in\mathcal A_1}
-M_x^{\beta}\ee^{\jj2\pi\beta n},
-\qquad u[n]=x[n]-m[n],
-\label{eq:meanexpansion}
-\end{equation}
-where $\mathcal A_1$ is the set of first-order cycle frequencies.  Applying the classical moment--cumulant decomposition~\cite[eq. (13.12)]{gardner2006} to the second-order branch formed from $x[n+\tau]x^*[n]$ gives
-\begin{equation}
-R_{xx^*}^{\alpha}(\tau)
-=R_{uu^*}^{\alpha}(\tau)
-+\sum_{\beta\in\mathcal A_1}
-M_x^{\beta}
-\left[M_x^{\beta-\alpha}\right]^*
-\ee^{\jj2\pi\beta\tau}.
-\label{eq:meaninduced}
-\end{equation}
-Thus nonzero first-order coefficients at $\beta$ and $\gamma$ mark a candidate difference $\alpha=\beta-\gamma$ in the $x[n+\tau]x^*[n]$ branch and a candidate sum $\alpha=\beta+\gamma$ in the $x[n+\tau]x[n]$ branch, with discrete-time cycle frequencies taken modulo one.  Coincident contributions can combine or cancel.  In a finite record, $\widehat M_x^\beta=y_{\mathrm{MF}}(\beta)/N$, so the same matched-filter bank estimates the first-order coefficients used in this support check.
-
-For an exact finite-record illustration, let $P=16$, $N=64$, and
-\begin{equation}
-x[n]=\ee^{\jj2\pi n/16}
-+\frac{1}{2}\ee^{\jj2\pi5n/16},
-\qquad 0\leq n<64.
-\label{eq:twotoneexample}
-\end{equation}
-The record contains four complete periods.  Its first-order bank is nonzero only at bins $k=1$ and $k=5$, with coefficients $1$ and $1/2$.  Thus the corresponding matched-filter outputs, normalized by $N=64$, are $1$ and $1/2$; the unnormalized outputs are $64$ and $32$.  The phase average reconstructs $x[n]$ exactly.
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=0.94\linewidth]{figures/two_tone_support.pdf}
-\caption{Exact support propagation for~\eqref{eq:twotoneexample}.  The first-order coefficient magnitudes (top) equal the matched-filter output magnitudes divided by $N=64$.  At zero lag, the $xx^*$ branch contains their pairwise differences modulo 16 (middle), while the $xx$ branch contains their pairwise sums (bottom).  Because $\overline{x}_{16}[n\bmod16]=x[n]$ in this pure-periodic example, centering removes every displayed line.}
-\label{fig:twotonesupport}
-\end{figure}
-
-Figure~\ref{fig:twotonesupport} follows those two first-order lines into the zero-lag second-order moments.  The difference bins are $0$, $4$, and $12$, and the sum bins are $2$, $6$, and $10$.  These mean-product lines are genuine components of the raw cyclic moment, but they do not represent independent periodicity of centered fluctuations.  In data, estimating and subtracting the periodic mean before recomputing the second-order statistic helps distinguish what is inherited from first order from what remains in the residual.  Related preprocessing has also been demonstrated in machinery data: Roussel et al. remove first-order periodic components with a biquad notch-filter bank before estimating second-order cumulants~\cite{roussel2018}.  Period mismatch, leakage, and mean-estimation error can leave residual mean terms.
-
-\FloatBarrier
+The same coefficients reappear one order up.  By the moment--cumulant relation~\cite[eq. (13.12)]{gardner2006}, a raw second-order cyclic moment contains the products $M_x^{\beta}[M_x^{\gamma}]^*$ at cycle frequency $\beta-\gamma$, or $M_x^{\beta}M_x^{\gamma}$ at $\beta+\gamma$ when neither factor is conjugated, so the bank also lists the cycle frequencies that a raw second-order moment inherits from the mean.  We do not pursue that here.
 
 \section*{Conclusion}
 
-At first order, the cyclic mean and a normalized tone matched-filter output are the same finite-record projection: $y_{\mathrm{MF}}(f)=N\widehat M_x^f$.  The conjugate case follows by conjugating the completed coefficient and reflecting the cycle frequency.  A complete harmonic bank reconstructs the phase-synchronous average, and the locations of its significant coefficients mark candidate sum- and difference-frequency contributions of that mean to raw second-order moments.  The matched-filter view therefore connects one coefficient, periodic reconstruction, and first-order centering without recasting the established reconstruction and moment-decomposition results as new.
+At first order, the cyclic mean, the normalized tone matched-filter output, and the least-squares tone amplitude are one finite-record projection: $y_{\mathrm{MF}}(f)=N\widehat M_x^f$.  The conjugate case follows by conjugating the completed coefficient and reflecting the cycle frequency.  Over whole periods, the bank at the harmonics is the synchronized average.  None of the individual results is new; the compact finite-record statement is what this note adds.
 
 
-\begin{thebibliography}{5}
+\begin{thebibliography}{4}
 
 \bibitem{gardner1986}
 W. A. Gardner, ``The spectral correlation theory of cyclostationary time-series,''
@@ -253,18 +206,9 @@ W. A. Gardner, A. Napolitano, and L. Paura, ``Cyclostationarity: Half a century 
 \emph{Signal Processing}, vol. 86, no. 4, pp. 639--697, Apr. 2006,
 doi: \href{https://doi.org/10.1016/j.sigpro.2005.06.016}{10.1016/j.sigpro.2005.06.016}.
 
-\bibitem{lanterman2016}
-A. D. Lanterman, J. E. Michaels, and M. B. Egerstedt,
-\href{https://jrom.ece.gatech.edu/wp-content/uploads/sites/466/2016/11/3084book_aug22_2016.pdf}{\emph{Signals and Systems for All Electrical Engineers}}.
-Atlanta, GA, USA: Georgia Institute of Technology, 2016, ch. 5.
-
-\bibitem{roussel2018}
-J. Roussel, A. Assoumane, C. Capdessus, and E. Sekko,
-``Estimation of cyclic cumulants of machinery vibration signals in non-stationary operation,''
-in \emph{Advances in Condition Monitoring of Machinery in Non-Stationary Operations},
-A. Timofiejczuk, F. Chaari, R. Zimroz, W. Bartelmus, and M. Haddar, Eds.
-Cham, Switzerland: Springer, 2018, pp. 21--31,
-doi: \href{https://doi.org/10.1007/978-3-319-61927-9_3}{10.1007/978-3-319-61927-9\_3}.
+\bibitem{kay1998}
+S. M. Kay, \emph{Fundamentals of Statistical Signal Processing, Volume II: Detection Theory}.
+Upper Saddle River, NJ, USA: Prentice-Hall, 1998.
 
 \end{thebibliography}
 
